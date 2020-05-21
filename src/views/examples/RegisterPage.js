@@ -1,23 +1,8 @@
-/*!
 
-=========================================================
-* BLK Design System React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/blk-design-system-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/blk-design-system-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 import classnames from "classnames";
 import * as actions from "store/actions/auth";
+import { Link } from "react-router-dom"
 
 // reactstrap components
 import {
@@ -75,7 +60,7 @@ class RegisterPage extends React.Component {
 
   handleEmail = e => {
     this.setState({ emailFocus: false })
-    let { email } = this.state;
+    let { email } = this.state
     let errors = {};
     let formIsValid = true;
     //Email
@@ -230,7 +215,7 @@ class RegisterPage extends React.Component {
     const { error, token } = this.props
 
     if (token) {
-      return <Redirect to="/"></Redirect>;
+      return <Redirect to="/profile-page"></Redirect>;
     }
 
     return (
@@ -395,7 +380,7 @@ class RegisterPage extends React.Component {
                               </InputGroupText>
                             </InputGroupAddon>
                             <Input
-                              onChange={this.onChange}
+                              onChange={this.handleChange}
                               value={btc_wallet}
                               name="btc_wallet"
                               placeholder="BTC Wallet Address"
@@ -425,9 +410,9 @@ class RegisterPage extends React.Component {
                       </CardBody>
                       <div className="text-center card-footer">
                         {this.checkform ?
-                          <a href="#pablo" className="btn-round btn btn-primary btn-lg btn-block" onClick={this.handleSubmit}>
+                          <Link to="/profile-page" className="btn-round btn btn-primary btn-lg btn-block" onClick={this.handleSubmit}>
                             Get Started
-                        </a>
+                        </Link>
                           :
                           <a href="#pablo" className="btn-round btn btn-primary btn-lg btn-block" onClick={this.handleSubmit} disabled>
                             Get Started

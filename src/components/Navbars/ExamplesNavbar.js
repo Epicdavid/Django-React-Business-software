@@ -17,6 +17,8 @@
 */
 import React from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { logout } from "../../store/actions/auth";
 // reactstrap components
 import {
   Button,
@@ -198,11 +200,12 @@ class PagesNavbar extends React.Component {
                   </DropdownItem>
                   {
                     this.props.isAuthenticated ?
-                      <DropdownItem tag={Link} to="/login-page">
+                      <DropdownItem onClick={this.props.logout}>
                         <i className="tim-icons icon-single-02" />
                     Logout
-                  </DropdownItem> :
-                      <DropdownItem tag={Link} to="/logout">
+                  </DropdownItem>
+                      :
+                      <DropdownItem tag={Link} to="/login-page" >
                         <i className="tim-icons icon-single-02" />
                   Login
                 </DropdownItem>
@@ -247,4 +250,11 @@ class PagesNavbar extends React.Component {
 }
 
 
-export default PagesNavbar;
+const mapDispatchToProps = dispatch => {
+  return {
+    logout: () => dispatch(logout())
+
+  }
+}
+
+export default connect(null, mapDispatchToProps)(PagesNavbar);

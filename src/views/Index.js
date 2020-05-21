@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import ExamplesNavbar from "components/Navbars/ExamplesNavbar.js"
 import PageHeader from "components/PageHeader/PageHeader.js";
 import Footer from "components/Footer/Footer.js";
-import * as action from "../store/actions/auth";
+import { logout } from "../store/actions/auth";
 
 // sections for this page/view
 
@@ -44,7 +44,8 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    onTryReg: () => dispatch(action.authCheckState())
+    logout: () => dispatch(logout())
+
   }
 }
 
