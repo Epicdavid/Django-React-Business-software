@@ -47,10 +47,10 @@ export const authLogin = (username, password) => {
       .then(res => {
         const user = {
           token: res.data.key,
-          username: res.data.user,
+          username: res.data.user_detail.username,
           expirationDate: new Date(new Date().getTime() + 3600 * 1000),
           userId: res.data.user,
-          btc_wallet: res.data.btc_wallet
+          btc_wallet: res.data.user_detail.btc_wallet
         }
         localStorage.setItem("user", JSON.stringify(user));
         dispatch(authSuccess(user));

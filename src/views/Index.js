@@ -15,7 +15,6 @@ import Signup from "views/IndexSections/Signup.js";
 class Index extends React.Component {
   componentDidMount() {
     document.body.classList.toggle("index-page");
-    this.props.onTryReg();
   }
   componentWillUnmount() {
     document.body.classList.toggle("index-page");

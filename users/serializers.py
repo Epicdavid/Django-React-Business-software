@@ -3,6 +3,7 @@ from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.serializers import LoginSerializer
 from .models import User
 from allauth.account.adapter import get_adapter
+from rest_framework.authtoken.models import Token
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -36,3 +37,22 @@ class SignupSerializer(RegisterSerializer):
         adapter.save_user(request, user, self)
         return user
     
+class TokenSerializer(serializers.ModelSerializer):
+    user_detail = serializers.SerializerMethodField()
+
+    class Meta:
+        model= Token 
+        fields = ('key','user','user_detail')
+
+    def get_user_detail(self, obj):
+        serializer_data = UserSerializer(obj.user).data
+        is_student = serializer_data.get('is_student')
+        is_staff = serializer_data.get('is_staff')
+        username = serializer_data.get('username')
+        btc_wallet = serializer_data.get('btc_wallet')
+        return{
+            'is_client': is_student,
+            'is_staff': is_staff,
+            'username': username,
+            'btc_wallet': btc_wallet
+        }
