@@ -5,7 +5,9 @@ const initialState = {
   token: null,
   username: null,
   error: null,
-  loading: false
+  loading: false,
+  userId: null,
+  btc_wallet: null
 };
 
 const authStart = (state, action) => {
@@ -19,7 +21,10 @@ const authSuccess = (state, action) => {
   return updateObject(state, {
     token: action.user.token,
     error: null,
-    loading: false
+    loading: false,
+    username: action.user.username,
+    userId: action.user.userId,
+    btc_wallet: action.user.btc_wallet
   });
 };
 

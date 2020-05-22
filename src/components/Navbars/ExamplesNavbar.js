@@ -249,6 +249,11 @@ class PagesNavbar extends React.Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: state.token !== null
+  }
+}
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -257,4 +262,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(null, mapDispatchToProps)(PagesNavbar);
+export default connect(mapStateToProps, mapDispatchToProps)(PagesNavbar);

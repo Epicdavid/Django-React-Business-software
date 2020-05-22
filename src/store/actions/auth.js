@@ -39,18 +39,21 @@ export const checkAuthTimeout = expirationTime => {
 export const authLogin = (username, password) => {
   return dispatch => {
     dispatch(authStart());
-
+    const user = {
+      username, password
+    }
     axios
-      .post("http://127.0.0.1:8000/rest-auth/login/", {
-        username: username,
-        password: password
-      })
+      .post("http://127.0.0.1:8000/rest-auth/login/", user)
       .then(res => {
-        const token = res.data.key;
-        const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
-        localStorage.setItem("token", token);
-        localStorage.setItem("expirationDate", expirationDate);
-        dispatch(authSuccess(token));
+        const user = {
+          token: res.data.key,
+          username: res.data.user,
+          expirationDate: new Date(new Date().getTime() + 3600 * 1000),
+          userId: res.data.user,
+          btc_wallet: res.data.btc_wallet
+        }
+        localStorage.setItem("user", JSON.stringify(user));
+        dispatch(authSuccess(user));
         dispatch(checkAuthTimeout(3600));
       })
       .catch(err => {

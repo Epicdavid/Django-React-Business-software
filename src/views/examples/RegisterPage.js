@@ -409,15 +409,11 @@ class RegisterPage extends React.Component {
                         </Form>
                       </CardBody>
                       <div className="text-center card-footer">
-                        {this.checkform ?
-                          <Link to="/profile-page" className="btn-round btn btn-primary btn-lg btn-block" onClick={this.handleSubmit}>
-                            Get Started
+
+                        <Link to="/profile-page" className="btn-round btn btn-primary btn-lg btn-block" onClick={this.handleSubmit}>
+                          Get Started
                         </Link>
-                          :
-                          <a href="#pablo" className="btn-round btn btn-primary btn-lg btn-block" onClick={this.handleSubmit} disabled>
-                            Get Started
-                        </a>
-                        }
+
                       </div>
                     </Card>
                   </div>

@@ -15,6 +15,8 @@ import {
     Container,
     Row,
     Spinner,
+    Alert,
+    Button,
 } from "reactstrap";
 
 // core components
@@ -107,12 +109,15 @@ class LoginPage extends React.Component {
 
                                         <Card className="card-register">
                                             <CardHeader>
-                                                {error && <p color="Danger">{this.props.error.message}</p>}
                                             </CardHeader>
                                             <h6 className="card-title" style={{ textAlign: 'center' }}>Login</h6>
 
                                             <CardBody>
-
+                                                {this.props.error ?
+                                                    <Alert color="danger">{error && <p>{this.props.error.message}</p>}</Alert>
+                                                    :
+                                                    null
+                                                }
                                                 <Form className="form" onSubmit={this.onSubmit}>
                                                     <InputGroup
                                                         className={classnames({
@@ -159,18 +164,21 @@ class LoginPage extends React.Component {
                                                         />
                                                     </InputGroup>
                                                 </Form>
+                                                <div>
+                                                    <Spinner color="danger" />
+                                                </div>
                                             </CardBody>
 
 
                                             <div className="text-center card-footer">
                                                 {
                                                     this.props.loading ?
-                                                        <Spinner style={{ width: '3rem', height: '3rem' }} type="grow" />
+                                                        <Spinner color="danger" type="grow" />
                                                         :
 
-                                                        <a href="#pablo" className="btn-round btn btn-primary btn-lg btn-block" type="submit" onClick={this.onSubmit}>
+                                                        <Button className="btn-round btn btn-primary btn-lg btn-block" onClick={this.onSubmit}>
                                                             Get Started
-                                            </a>
+                                                        </Button>
                                                 }
 
                                                 <div className="pull-left ml-3 mb-3">
@@ -228,7 +236,8 @@ class LoginPage extends React.Component {
 const mapStateToProps = state => {
     return {
         error: state.error,
-        loading: state.loading
+        loading: state.loading,
+        token: state.token
     }
 }
 
