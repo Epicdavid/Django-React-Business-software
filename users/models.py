@@ -17,6 +17,7 @@ class client(models.Model):
     balance = models.CharField(max_length=300, blank=True, null=True)
     active_affiliates = models.CharField(max_length=200, blank=True, null=True)
     referral_earning = models.CharField(max_length=300, blank=True, null=True)
+    
 
     
     def __str__(self):

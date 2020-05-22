@@ -54,6 +54,10 @@ TEMPLATES = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'users.backends.CustomerBackend',
+]
 
 
 LANGUAGE_CODE = 'en-us'
@@ -85,7 +89,8 @@ AUTH_USER_MODEL = 'users.User'
 ACCOUNT_UNIQUE_EMAIL = True
 
 REST_AUTH_SERIALIZERS = {
-    'USER_DETAILS_SERIALIZER':'users.serializers.UserSerializer'
+    'USER_DETAILS_SERIALIZER':'users.serializers.UserSerializer',
+    
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from rest_auth.registration.serializers import RegisterSerializer
+from rest_auth.serializers import LoginSerializer
 from .models import User
 from allauth.account.adapter import get_adapter
 
@@ -7,6 +8,8 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
+
+   
 
 class SignupSerializer(RegisterSerializer):
     btc_wallet = serializers.CharField(max_length=300)    
