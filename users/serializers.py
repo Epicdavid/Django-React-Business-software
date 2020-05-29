@@ -5,12 +5,14 @@ from .models import User
 from allauth.account.adapter import get_adapter
 from rest_framework.authtoken.models import Token
 
+from datetime import datetime
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
 
-   
+
 
 class SignupSerializer(RegisterSerializer):
     btc_wallet = serializers.CharField(max_length=300)    
@@ -39,20 +41,31 @@ class SignupSerializer(RegisterSerializer):
     
 class TokenSerializer(serializers.ModelSerializer):
     user_detail = serializers.SerializerMethodField()
-
+    
     class Meta:
         model= Token 
         fields = ('key','user','user_detail')
 
     def get_user_detail(self, obj):
         serializer_data = UserSerializer(obj.user).data
+        orders = UserSerializer(obj.user.orders.all(), many=True)
         is_student = serializer_data.get('is_student')
         is_staff = serializer_data.get('is_staff')
         username = serializer_data.get('username')
         btc_wallet = serializer_data.get('btc_wallet')
+        time = serializer_data.get('date_joined')
+        date = datetime.strptime(time, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%B')
+        urlhash = serializer_data.get('urlhash')
+        Balance = serializer_data.get('balance')
+        
         return{
             'is_client': is_student,
             'is_staff': is_staff,
             'username': username,
-            'btc_wallet': btc_wallet
+            'btc_wallet': btc_wallet,
+            'monthjoined': date,
+            'hash': urlhash,
+            'balance': Balance
         }
+
+    

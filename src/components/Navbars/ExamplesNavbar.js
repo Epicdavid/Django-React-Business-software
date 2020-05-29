@@ -190,7 +190,7 @@ class PagesNavbar extends React.Component {
                   Getting started
                 </DropdownToggle>
                 <DropdownMenu className="dropdown-with-icons">
-                  <DropdownItem href="https://demos.creative-tim.com/blk-design-system-react/#/documentation/tutorial">
+                  <DropdownItem tag={Link} to="/Rates">
                     <i className="tim-icons icon-paper" />
                     Our Rates
                   </DropdownItem>
@@ -226,9 +226,9 @@ class PagesNavbar extends React.Component {
                   className="nav-link d-none d-lg-block"
                   color="primary"
                   target="_blank"
-                  href="https://www.creative-tim.com/product/blk-design-system-pro-react?ref=bdsr-examples-navbar-upgrade-pro"
                 >
-                  <i className="tim-icons icon-spaceship" /> Upgrade to PRO
+                  <Link to="/Dashboard"><i className="tim-icons icon-spaceship" /> Dashboard
+                  </Link>
                 </Button>
               </NavItem>
               <NavItem>

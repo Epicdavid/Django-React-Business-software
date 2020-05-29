@@ -2,6 +2,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
+
 // core components
 import ExamplesNavbar from "components/Navbars/ExamplesNavbar.js"
 import PageHeader from "components/PageHeader/PageHeader.js";

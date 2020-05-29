@@ -106,7 +106,7 @@ class RatePage extends React.Component {
                                 </Col>
                             </Row>
                             <Row>
-                                <Col md="4">
+                                <Col md="3">
                                     <Card className="card-coin card-plain">
                                         <CardHeader>
                                             <img
@@ -119,19 +119,19 @@ class RatePage extends React.Component {
                                             <Row>
 
                                                 <Col className="text-center" md="12">
-                                                    <h1 className="card-title" ><small>$</small>500</h1>
+                                                    <h1 className="card-title" ><small>$</small>250</h1>
                                                     <UncontrolledTooltip placement="bottom" target="help-tip">
                                                         Earn 18% Return on investment every month, on your Dip Starter, Interest Account(DIA)
                                                     </UncontrolledTooltip>
                                                     <span>Dip Starter-Interest Account</span>
                                                     <hr className="line-primary" />
-                                                    <h5 id="help-tip">18.0% R0I / month</h5>
+                                                    <h5 id="help-tip">15.0% R0I / month</h5>
                                                 </Col>
                                             </Row>
                                             <Row>
                                                 <ListGroup>
 
-                                                    <ListGroupItem><i class="tim-icons icon-chart-bar-32"></i>&nbsp; $500 - $4999</ListGroupItem>
+                                                    <ListGroupItem><i class="tim-icons icon-chart-bar-32"></i>&nbsp; $250 - $4999</ListGroupItem>
                                                     <ListGroupItem><i class="tim-icons icon-alert-circle-exc" />&nbsp;&nbsp; 24/7 Support</ListGroupItem>
                                                     <ListGroupItem><i class="icon-calendar-60" />&nbsp;&nbsp; 10months Duration</ListGroupItem>
                                                 </ListGroup>
@@ -140,11 +140,48 @@ class RatePage extends React.Component {
                                         <CardFooter className="text-center">
                                             <Button className="btn-simple" color="primary">
                                                 Get plan
-                      </Button>
+                                            </Button>
                                         </CardFooter>
                                     </Card>
                                 </Col>
-                                <Col md="4">
+                                <Col md="3">
+                                    <Card className="card-coin card-plain">
+                                        <CardHeader>
+                                            <img
+                                                alt="..."
+                                                className="img-center img-fluid"
+                                                src={require("assets/img/bitcoin.png")}
+                                            />
+                                        </CardHeader>
+                                        <CardBody>
+                                            <Row>
+                                                <Col className="text-center" md="12">
+                                                    <h1 className="card-title" ><small>$</small>5000</h1>
+                                                    <UncontrolledTooltip placement="bottom" target="help-tip">
+                                                        Earn 18% Return on investment every month, on your Dip Lite, Interest Account(DIA)
+                                                    </UncontrolledTooltip>
+                                                    <span>Dip Lite-Interest Account</span>
+                                                    <hr className="line-primary" />
+                                                    <h5 id="help-tip">18.0% R0I / month</h5>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <ListGroup>
+
+                                                    <ListGroupItem><i class="tim-icons icon-chart-bar-32"></i>&nbsp; $5000 - $9999</ListGroupItem>
+                                                    <ListGroupItem><i class="tim-icons icon-alert-circle-exc" />&nbsp;&nbsp; 24/7 Support</ListGroupItem>
+                                                    <ListGroupItem><i class="icon-calendar-60" />&nbsp;&nbsp; 10months Duration</ListGroupItem>
+                                                </ListGroup>
+                                            </Row>
+                                        </CardBody>
+                                        <CardFooter className="text-center">
+                                            <Button className="btn-simple" color="primary">
+                                                Get plan
+                                            </Button>
+                                        </CardFooter>
+                                    </Card>
+                                </Col>
+                                <Col md="3">
                                     <Card className="card-coin card-plain">
                                         <CardHeader>
                                             <img
@@ -180,7 +217,7 @@ class RatePage extends React.Component {
                                         </CardFooter>
                                     </Card>
                                 </Col>
-                                <Col md="4">
+                                <Col md="3">
                                     <Card className="card-coin card-plain">
                                         <CardHeader>
                                             <img

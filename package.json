@@ -3,9 +3,13 @@
   "version": "0.3.0",
   "private": true,
   "dependencies": {
+    "@types/react": "^16.9.35",
     "axios": "^0.19.2",
     "chart.js": "^2.9.3",
+    "classnames": "^2.2.6",
     "core-js": "^3.6.5",
+    "css-modules": "^0.3.0",
+    "history": "^4.10.1",
     "node-sass": "^4.14.1",
     "nouislider": "^14.5.0",
     "perfect-scrollbar": "^1.5.0",
@@ -15,6 +19,7 @@
     "react-chartjs-2": "^2.9.0",
     "react-datetime": "^2.16.3",
     "react-dom": "^16.13.1",
+    "react-google-maps": "^9.4.5",
     "react-notification-alert": "0.0.12",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
@@ -29,7 +34,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
+    "compile-scss": "node-sass src/assets/admin/scss/black-dashboard-react.scss src/assets/admin/css/black-dashboard-react.css",
+    "minify-sass": "node-sass src/assets/admin/scss/black-dashboard-react.scss src/assets/admin/css/black-dashboard-react.min.css --output-style compressed",
+    "map-sass": "node-sass src/assets/admin/scss/black-dashboard-react.scss src/assets/css/black-dashboard-react.css --source-map true"
   },
   "browserslist": {
     "production": [
@@ -42,5 +51,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "css-loader": "^3.5.3"
   }
 }
