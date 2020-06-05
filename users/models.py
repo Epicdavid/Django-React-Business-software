@@ -58,7 +58,7 @@ class Product(models.Model):
 class Order(models.Model):
     STATUS = (
         ('Pending', 'Pending'),
-        ('Aprroved', 'Approved'),
+        ('Approved', 'Approved'),
     )
     customer = models.ForeignKey(User, related_name='orders',on_delete=models.SET_NULL, null=True)
     product = models.ForeignKey(Product,related_name='orders', on_delete=models.SET_NULL,null=True)
@@ -70,6 +70,20 @@ class Order(models.Model):
     
     def __str__(self):
         return self.product.name
+
+
+    def save(self,*args, **kwargs):
+
+        if  self.status == "Approved":
+            try:
+                print(self.amount)
+                acc = User.objects.get(username=self.customer) 
+                acc.account_balance += self.amount
+                acc.save()
+            except Exception as e:
+                print (e)
+        super().save(*args, **kwargs)
+        
 
 
 class Stats(models.Model):

@@ -1,5 +1,6 @@
 
 import React from "react";
+import axios from "axios";
 // javascript plugin used to create scrollbars on windows
 // reactstrap components
 import {
@@ -19,15 +20,28 @@ import {
 // core components
 import ExamplesNavbar from "components/Navbars/ExamplesNavbar.js";
 import Footer from "components/Footer/Footer.js";
+import { connect } from "react-redux";
+import * as actions from "../../store/actions/products";
 
 class RatePage extends React.Component {
+
+
     componentDidMount() {
         document.body.classList.toggle("landing-page");
+        this.props.getProduct();
     }
+
+
+
     componentWillUnmount() {
         document.body.classList.toggle("landing-page");
     }
     render() {
+
+        const { data, loading } = this.props;
+
+
+
         return (
             <>
                 <ExamplesNavbar />
@@ -105,6 +119,7 @@ class RatePage extends React.Component {
                                     </h1>
                                 </Col>
                             </Row>
+
                             <Row>
                                 <Col md="3">
                                     <Card className="card-coin card-plain">
@@ -115,28 +130,30 @@ class RatePage extends React.Component {
                                                 src={require("assets/img/bitcoin.png")}
                                             />
                                         </CardHeader>
+
                                         <CardBody>
                                             <Row>
 
                                                 <Col className="text-center" md="12">
-                                                    <h1 className="card-title" ><small>$</small>250</h1>
+                                                    <h1 className="card-title" ><small >$</small>{data[0]?.Price}</h1>
                                                     <UncontrolledTooltip placement="bottom" target="help-tip">
-                                                        Earn 18% Return on investment every month, on your Dip Starter, Interest Account(DIA)
+                                                        Earn {data[0]?.ROI} Return on investment every month, on your Dip Starter, Interest Account(DIA)
                                                     </UncontrolledTooltip>
                                                     <span>Dip Starter-Interest Account</span>
                                                     <hr className="line-primary" />
-                                                    <h5 id="help-tip">15.0% R0I / month</h5>
+                                                    <h5 id="help-tip">{data[0]?.ROI} R0I / month</h5>
                                                 </Col>
                                             </Row>
                                             <Row>
                                                 <ListGroup>
 
-                                                    <ListGroupItem><i class="tim-icons icon-chart-bar-32"></i>&nbsp; $250 - $4999</ListGroupItem>
+                                                    <ListGroupItem><i class="tim-icons icon-chart-bar-32"></i>&nbsp; ${data[0]?.Price} - $4999</ListGroupItem>
                                                     <ListGroupItem><i class="tim-icons icon-alert-circle-exc" />&nbsp;&nbsp; 24/7 Support</ListGroupItem>
-                                                    <ListGroupItem><i class="icon-calendar-60" />&nbsp;&nbsp; 10months Duration</ListGroupItem>
+                                                    <ListGroupItem><i class="icon-calendar-60" />&nbsp;&nbsp; {data[0]?.Duration}months Duration</ListGroupItem>
                                                 </ListGroup>
                                             </Row>
                                         </CardBody>
+
                                         <CardFooter className="text-center">
                                             <Button className="btn-simple" color="primary">
                                                 Get plan
@@ -156,21 +173,21 @@ class RatePage extends React.Component {
                                         <CardBody>
                                             <Row>
                                                 <Col className="text-center" md="12">
-                                                    <h1 className="card-title" ><small>$</small>5000</h1>
+                                                    <h1 className="card-title" ><small>$</small>{data[1]?.Price}</h1>
                                                     <UncontrolledTooltip placement="bottom" target="help-tip">
-                                                        Earn 18% Return on investment every month, on your Dip Lite, Interest Account(DIA)
+                                                        Earn {data[1]?.ROI} Return on investment every month, on your Dip Lite, Interest Account(DIA)
                                                     </UncontrolledTooltip>
                                                     <span>Dip Lite-Interest Account</span>
                                                     <hr className="line-primary" />
-                                                    <h5 id="help-tip">18.0% R0I / month</h5>
+                                                    <h5 id="help-tip">{data[1]?.ROI} R0I / month</h5>
                                                 </Col>
                                             </Row>
                                             <Row>
                                                 <ListGroup>
 
-                                                    <ListGroupItem><i class="tim-icons icon-chart-bar-32"></i>&nbsp; $5000 - $9999</ListGroupItem>
-                                                    <ListGroupItem><i class="tim-icons icon-alert-circle-exc" />&nbsp;&nbsp; 24/7 Support</ListGroupItem>
-                                                    <ListGroupItem><i class="icon-calendar-60" />&nbsp;&nbsp; 10months Duration</ListGroupItem>
+                                                    <ListGroupItem><i className="tim-icons icon-chart-bar-32"></i>&nbsp; ${data[1]?.Price} - $9999</ListGroupItem>
+                                                    <ListGroupItem><i className="tim-icons icon-alert-circle-exc" />&nbsp;&nbsp; 24/7 Support</ListGroupItem>
+                                                    <ListGroupItem><i className="icon-calendar-60" />&nbsp;&nbsp; {data[1]?.Duration}months Duration</ListGroupItem>
                                                 </ListGroup>
                                             </Row>
                                         </CardBody>
@@ -193,20 +210,20 @@ class RatePage extends React.Component {
                                         <CardBody>
                                             <Row>
                                                 <Col className="text-center" md="12">
-                                                    <h1 className="card-title" ><small>$</small>10,000</h1>
+                                                    <h1 className="card-title" ><small>$</small>{data[2]?.Price}</h1>
                                                     <UncontrolledTooltip placement="bottom" target="help-pro">
-                                                        Earn 25.0% Return on investment every month, on your Dip Pro, Interest Account(DIA)
+                                                        Earn {data[2]?.ROI} Return on investment every month, on your Dip Pro, Interest Account(DIA)
                                                     </UncontrolledTooltip>
                                                     <span>Dip Pro-Interest Account</span>
                                                     <hr className="line-primary" />
-                                                    <h5 id="help-pro">25.0% R0I / month</h5>
+                                                    <h5 id="help-pro">{data[1]?.ROI} R0I / month</h5>
                                                 </Col>
                                             </Row>
                                             <Row>
                                                 <ListGroup>
-                                                    <ListGroupItem><i class="tim-icons icon-chart-bar-32"></i>&nbsp; $10,000 - $99,999</ListGroupItem>
+                                                    <ListGroupItem><i class="tim-icons icon-chart-bar-32"></i>&nbsp; ${data[2]?.Price} - $99,999</ListGroupItem>
                                                     <ListGroupItem><i class="tim-icons icon-alert-circle-exc" />&nbsp;&nbsp; 24/7 Support</ListGroupItem>
-                                                    <ListGroupItem><i class="icon-calendar-60" />&nbsp;&nbsp; 12months Duration</ListGroupItem>
+                                                    <ListGroupItem><i class="icon-calendar-60" />&nbsp;&nbsp; {data[2]?.Duration}months Duration</ListGroupItem>
                                                 </ListGroup>
                                             </Row>
                                         </CardBody>
@@ -229,20 +246,20 @@ class RatePage extends React.Component {
                                         <CardBody>
                                             <Row>
                                                 <Col className="text-center" md="12">
-                                                    <h1 className="card-title" ><small>$</small>100,000</h1>
+                                                    <h1 className="card-title" ><small>$</small>{data[3]?.Price}</h1>
                                                     <UncontrolledTooltip placement="bottom" target="help-ent">
-                                                        Earn 35.0% Return on investment every month, on your Dip Enterprise, Interest Account(DIA)
+                                                        Earn {data[3]?.ROI} Return on investment every month, on your Dip Enterprise, Interest Account(DIA)
                                                     </UncontrolledTooltip>
                                                     <span>Dip Enterprise-Interest Account</span>
                                                     <hr className="line-primary" />
-                                                    <h5 id="help-ent">35.0% R0I / month</h5>
+                                                    <h5 id="help-ent">{data[3]?.ROI} R0I / month</h5>
                                                 </Col>
                                             </Row>
                                             <Row>
                                                 <ListGroup>
                                                     <ListGroupItem><i class="tim-icons icon-chart-bar-32"></i>&nbsp; Unlimited</ListGroupItem>
                                                     <ListGroupItem><i class="tim-icons icon-alert-circle-exc" />&nbsp;&nbsp; 24/7 Support</ListGroupItem>
-                                                    <ListGroupItem><i class="icon-calendar-60" />&nbsp;&nbsp; 18months Duration</ListGroupItem>
+                                                    <ListGroupItem><i class="icon-calendar-60" />&nbsp;&nbsp; {data[3]?.Duration}months Duration</ListGroupItem>
                                                 </ListGroup>
                                             </Row>
                                         </CardBody>
@@ -254,6 +271,7 @@ class RatePage extends React.Component {
                                     </Card>
                                 </Col>
                             </Row>
+
                         </Container>
                     </section>
 
@@ -264,4 +282,16 @@ class RatePage extends React.Component {
     }
 }
 
-export default RatePage;
+const mapStateToProps = state => {
+    return {
+        data: state.products.products,
+        loading: state.loading
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        getProduct: () => dispatch(actions.getProduct())
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(RatePage);
