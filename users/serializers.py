@@ -56,7 +56,7 @@ class TokenSerializer(serializers.ModelSerializer):
         time = serializer_data.get('date_joined')
         date = datetime.strptime(time, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%B')
         urlhash = serializer_data.get('urlhash')
-        Balance = serializer_data.get('balance')
+        balance = serializer_data.get('account_balance')
         
         return{
             'is_client': is_student,
@@ -65,7 +65,7 @@ class TokenSerializer(serializers.ModelSerializer):
             'btc_wallet': btc_wallet,
             'monthjoined': date,
             'hash': urlhash,
-            'balance': Balance
+            'balance': balance
         }
 
     

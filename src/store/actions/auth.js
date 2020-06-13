@@ -50,7 +50,9 @@ export const authLogin = (username, password) => {
           username: res.data.user_detail.username,
           expirationDate: new Date(new Date().getTime() + 3600 * 1000),
           userId: res.data.user,
-          btc_wallet: res.data.user_detail.btc_wallet
+          btc_wallet: res.data.user_detail.btc_wallet,
+          balance: res.data.user_detail.balance,
+          hash: res.data.user_detail.hash
         }
         localStorage.setItem("user", JSON.stringify(user));
         dispatch(authSuccess(user));

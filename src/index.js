@@ -9,6 +9,7 @@ import { Provider, } from "react-redux";
 import authReducer from "./store/reducers/auth";
 import orderReducer from "./store/reducers/orders";
 import productReducer from "./store/reducers/products";
+import statReducer from "./store/reducers/stats";
 
 /*!import "assets/css/nucleo-icons.css";
 import "assets/scss/blk-design-system-react.scss?v=1.1.0";
@@ -23,7 +24,8 @@ import "assets/admin/css/nucleo-icons.css";
 const rootReducer = combineReducers({
   auth: authReducer,
   orders: orderReducer,
-  products: productReducer
+  products: productReducer,
+  stats: statReducer,
 })
 
 

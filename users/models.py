@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser
 from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
+from simple_history.models import HistoricalRecords
 
 
 
@@ -14,8 +15,10 @@ class User(AbstractUser):
     is_student = models.BooleanField()
     btc_wallet = models.CharField(max_length=300)
     date_joined = models.DateTimeField(auto_now_add=True)
-    urlhash = models.CharField(max_length=6, null=True, blank=True, unique=True)
-    account_balance = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
+    urlhash = models.CharField(max_length=14, null=True, blank=True, unique=True)
+    account_balance = models.DecimalField(max_digits=15, decimal_places=0, default=0,)
+    active_affiliates = models.CharField(max_length=200, blank=True, null=True)
+    active_package = models.CharField(max_length=300,blank=True, null=True)
     
     def __str__(self):
         return self.username
@@ -88,17 +91,26 @@ class Order(models.Model):
 
 class Stats(models.Model):
     user = models.ForeignKey(User, related_name="stats", on_delete=models.CASCADE)
-    active_package = models.CharField(max_length=300,blank=True, null=True)
-    capital = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
-    profits = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
-    balance = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
-    active_affiliates = models.CharField(max_length=200, blank=True, null=True)
-    referral_earning = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
+    newprofit = models.DecimalField(max_digits=15, decimal_places=0, default=0)
+    storage = models.DecimalField(max_digits=15, decimal_places=0, default=0)
+    allStorage = models.DecimalField(max_digits=15, decimal_places=0, default=0)
+    referral_earning = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    new_refEarning = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    history = HistoricalRecords()
     
 
     
     def __str__(self):
         return self.user.username
+
+    def save(self,*args, **kwargs):
+        self.storage += self.newprofit 
+        self.allStorage += self.newprofit + self.new_refEarning
+        self.referral_earning += self.new_refEarning
+        self.newprofit = 0
+        self.new_refEarning =  0
+        
+        super().save(*args, **kwargs)    
 
     
 

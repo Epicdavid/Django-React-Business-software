@@ -7,7 +7,10 @@ const initialState = {
   error: null,
   loading: false,
   userId: null,
-  btc_wallet: null
+  balance: null,
+  hash: null,
+  btc_wallet: null,
+
 };
 
 const authStart = (state, action) => {
@@ -24,7 +27,9 @@ const authSuccess = (state, action) => {
     loading: false,
     username: action.user.username,
     userId: action.user.userId,
-    btc_wallet: action.user.btc_wallet
+    btc_wallet: action.user.btc_wallet,
+    balance: action.user.balance,
+    hash: action.user.hash
   });
 };
 
