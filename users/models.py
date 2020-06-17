@@ -6,6 +6,11 @@ from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
 from simple_history.models import HistoricalRecords
+from pinax.referrals.models import Referral
+from mptt.models import (
+    MPTTModel,
+    TreeForeignKey
+)
 
 
 
@@ -19,6 +24,7 @@ class User(AbstractUser):
     account_balance = models.DecimalField(max_digits=15, decimal_places=0, default=0,)
     active_affiliates = models.CharField(max_length=200, blank=True, null=True)
     active_package = models.CharField(max_length=300,blank=True, null=True)
+    
     
     def __str__(self):
         return self.username
@@ -37,7 +43,45 @@ class User(AbstractUser):
             while User.objects.filter(urlhash=self.urlhash).exists():
                 self.urlhash = User.id_generator()
         super().save(*args, **kwargs)
-        
+
+
+
+class Profile(MPTTModel):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='user',
+    )
+    referral = models.OneToOneField(
+        Referral,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        verbose_name='referral',
+    )
+    parent = TreeForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        related_name='children',
+        blank=True,
+        null=True,
+        verbose_name='user_parent',
+    )
+
+
+    class Meta:
+        db_table = 'profile'
+        verbose_name = 'user_profile'
+        verbose_name_plural = 'user_profiles'
+
+
+    class MPTTMeta:
+        order_insertion_by = ['user']
+
+    def __str__(self):
+        return '%s (%s)' % (self.user.username, self.user.email)
+
+
 
 class Product(models.Model):
     STATUS = (
@@ -114,3 +158,20 @@ class Stats(models.Model):
 
     
 
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
+
+@receiver(user_signed_up)
+def handle_user_signed_up(sender, user, form, **kwargs):
+    profile = user.profile
+    referral = Referral.create(user=user, redirect_to=reverse_lazy(''))
+    profile.referral = referral
+    profile.save()
