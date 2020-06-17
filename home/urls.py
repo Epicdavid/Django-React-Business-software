@@ -9,5 +9,6 @@ urlpatterns = [
     path('api/', include('users.api.urls')),
     path('listApi/',include('users.api.order.urls')),
     path('admin/', admin.site.urls),
+    path(r"^referrals/", include("pinax.referrals.urls", namespace="pinax_referrals")),
     #re_path(r'^.*', TemplateView.as_view(template_name='index.html')),
 ]
