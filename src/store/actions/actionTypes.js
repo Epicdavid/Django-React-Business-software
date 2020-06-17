@@ -16,3 +16,7 @@ export const GET_STAT_START = "GET_STAT_START";
 export const GET_STAT_SUCCESS = "GET_STAT_SUCCESS";
 export const GET_STAT_FAIL = "GET_STAT_FAIL";
 
+
+export const GET_CHART_START = "GET_CHART_START"
+export const GET_CHART_SUCCESS = "GET_CHART_SUCCESS"
+export const GET_CHART_FAIL = "GET_CHART_FAIL"

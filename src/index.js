@@ -10,6 +10,7 @@ import authReducer from "./store/reducers/auth";
 import orderReducer from "./store/reducers/orders";
 import productReducer from "./store/reducers/products";
 import statReducer from "./store/reducers/stats";
+import chartReducer from "./store/reducers/chart";
 
 /*!import "assets/css/nucleo-icons.css";
 import "assets/scss/blk-design-system-react.scss?v=1.1.0";
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   orders: orderReducer,
   products: productReducer,
   stats: statReducer,
+  chart: chartReducer
 })
 
 
