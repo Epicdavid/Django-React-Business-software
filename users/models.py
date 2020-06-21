@@ -2,27 +2,32 @@ import string
 import random
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import post_save
+from allauth.account.signals import user_signed_up
 from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
 from simple_history.models import HistoricalRecords
+from django.dispatch import receiver
 from pinax.referrals.models import Referral
 from mptt.models import (
     MPTTModel,
     TreeForeignKey
+
 )
+from django.urls import reverse_lazy
 
 
 
 # Create your models here.
 
 class User(AbstractUser):
-    is_student = models.BooleanField()
+    is_student = models.BooleanField(default=False)
     btc_wallet = models.CharField(max_length=300)
     date_joined = models.DateTimeField(auto_now_add=True)
     urlhash = models.CharField(max_length=14, null=True, blank=True, unique=True)
     account_balance = models.DecimalField(max_digits=15, decimal_places=0, default=0,)
-    active_affiliates = models.CharField(max_length=200, blank=True, null=True)
+    active_affiliates = models.CharField(max_length=200, default=0)
     active_package = models.CharField(max_length=300,blank=True, null=True)
     
     
@@ -46,11 +51,12 @@ class User(AbstractUser):
 
 
 
-class Profile(MPTTModel):
+class Profile(models.Model):
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
         verbose_name='user',
+        related_name="profile"
     )
     referral = models.OneToOneField(
         Referral,
@@ -59,27 +65,13 @@ class Profile(MPTTModel):
         null=True,
         verbose_name='referral',
     )
-    parent = TreeForeignKey(
-        'self',
-        on_delete=models.CASCADE,
-        related_name='children',
-        blank=True,
-        null=True,
-        verbose_name='user_parent',
-    )
+    referredBy = models.ForeignKey(User, related_name='referredBy', on_delete=models.CASCADE, blank=True, null=True)
+   
 
 
-    class Meta:
-        db_table = 'profile'
-        verbose_name = 'user_profile'
-        verbose_name_plural = 'user_profiles'
-
-
-    class MPTTMeta:
-        order_insertion_by = ['user']
 
     def __str__(self):
-        return '%s (%s)' % (self.user.username, self.user.email)
+        return self.user.username
 
 
 
@@ -170,8 +162,15 @@ def save_user_profile(sender, instance, **kwargs):
 
 
 @receiver(user_signed_up)
-def handle_user_signed_up(sender, user, form, **kwargs):
+def handle_user_signed_up(sender, request, user, **kwargs):
     profile = user.profile
-    referral = Referral.create(user=user, redirect_to=reverse_lazy(''))
+    referral = Referral.create(user=user, redirect_to=reverse_lazy('rest_register'))
     profile.referral = referral
-    profile.save()
+    action = Referral.record_response(request, "USER_SIGNUP")
+    if action is not None:
+            referra = Referral.objects.get(id=action.referral.id)
+            print(referra.user.id)
+            profile.referredBy = User.objects.get(id=referra.user.id)
+            profile.save()
+            print(profile.referredBy)
+    print(profile.referredBy)

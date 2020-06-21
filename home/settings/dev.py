@@ -4,7 +4,7 @@ from .base import *
 
 ALLOWED_HOSTS += ['127.0.0.1','localhost:8000']
 DEBUG = True
-
+SITE_ID = 2
 WSGI_APPLICATION = 'home.wsgi.dev.application'
 
 DATABASES = {
