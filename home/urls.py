@@ -3,7 +3,7 @@ from django.urls import path, include, re_path
 from allauth.account.views import confirm_email
 from users.views import EmailView,EmailConfirmation
 from rest_auth.registration.views import VerifyEmailView, RegisterView
-
+from django.views.generic import TemplateView
 
 
 urlpatterns = [
@@ -21,5 +21,5 @@ urlpatterns = [
      name='account_email_verification_sent'),
     path('admin/', admin.site.urls),
     re_path(r"^referrals/", include("pinax.referrals.urls", namespace="pinax_referrals")),
-    re_path(r'^.*', TemplateView.as_view(template_name='index.html')),
+    #re_path(r'^.*', TemplateView.as_view(template_name='index.html')),
 ]
