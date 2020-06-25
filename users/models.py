@@ -29,6 +29,7 @@ class User(AbstractUser):
     account_balance = models.DecimalField(max_digits=15, decimal_places=0, default=0,)
     active_affiliates = models.CharField(max_length=200, default=0)
     active_package = models.CharField(max_length=300,blank=True, null=True)
+    email_verified = models.BooleanField(default=False)
     
     
     def __str__(self):

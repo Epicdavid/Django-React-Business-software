@@ -2,9 +2,9 @@
 
 from .base import *
 
-ALLOWED_HOSTS += ['127.0.0.1','localhost:8000']
+ALLOWED_HOSTS += ['127.0.0.1','localhost:8000', 'dippace.com']
 DEBUG = True
-SITE_ID = 2
+SITE_ID = 3
 WSGI_APPLICATION = 'home.wsgi.dev.application'
 
 DATABASES = {
@@ -17,3 +17,13 @@ DATABASES = {
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
 )
+
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
