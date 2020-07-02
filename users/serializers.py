@@ -10,6 +10,7 @@ from allauth.account.views import SignupView
 
 
 
+
 class UserSerializer(serializers.ModelSerializer):
     
     class Meta:

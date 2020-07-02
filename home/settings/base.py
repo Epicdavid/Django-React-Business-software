@@ -1,5 +1,5 @@
 import os
-
+from corsheaders.defaults import default_headers
 
 
 
@@ -93,8 +93,6 @@ REST_FRAMEWORK = {
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
-ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'rest-auth/login/'
-ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = 'rest-auth/login/'
 ACCOUNT_EMAIL_REQUIRED = True
 AUTH_USER_MODEL = 'users.User'
 ACCOUNT_UNIQUE_EMAIL = True
@@ -110,3 +108,6 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 }
 
 
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'X-CSRFTOKEN',
+]

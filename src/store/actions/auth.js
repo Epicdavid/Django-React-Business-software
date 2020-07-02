@@ -1,4 +1,5 @@
 import axios from "axios";
+import * as url from "./config";
 import * as actionTypes from "./actionTypes";
 
 export const authStart = () => {
@@ -43,7 +44,7 @@ export const authLogin = (username, password) => {
       username, password
     }
     axios
-      .post("http://127.0.0.1:8000/rest-auth/login/", user)
+      .post(url.BASE_URL + "/rest-auth/login/", user)
       .then(res => {
         const user = {
           token: res.data.key,
@@ -71,7 +72,7 @@ export const authSignup = (username, email, password1, password2, btc_wallet) =>
       username, email, password1, password2, btc_wallet,
     };
     axios
-      .post("http://127.0.0.1:8000/rest-auth/registration/", user)
+      .post(url.BASE_URL + "/rest-auth/registration/", user)
       .then(res => {
         const user = {
           token: res.data.key,

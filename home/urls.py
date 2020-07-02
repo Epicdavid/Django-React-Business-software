@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include, re_path
 from allauth.account.views import confirm_email
-from users.views import EmailView,EmailConfirmation
+from users.views import EmailView,EmailConfirmation,django_rest_auth_null,validateEmailToken
 from rest_auth.registration.views import VerifyEmailView, RegisterView
 from django.views.generic import TemplateView
 
@@ -11,12 +11,12 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('sendconfirmationemail/', EmailConfirmation.as_view(), name='send-email-confirmation'),
     path('mail/', EmailView.as_view()),
+    path('registration/verify-email/', VerifyEmailView.as_view(), name='rest_verify_email'),
+    path('verify/', validateEmailToken),
     path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
     path('api/', include('users.api.urls')),
     path('listApi/',include('users.api.order.urls')),
-    re_path(r'^account-confirm-email/(?P<key>[-:\w]+)/$', VerifyEmailView.as_view(),
-     name='account_confirm_email'),
     re_path(r'^account-confirm-email/', VerifyEmailView.as_view(),
      name='account_email_verification_sent'),
     path('admin/', admin.site.urls),
