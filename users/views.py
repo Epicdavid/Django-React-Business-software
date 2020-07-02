@@ -15,12 +15,17 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework import status
 from rest_framework.response import Response
 
+from rest_framework.generics import get_object_or_404
+from allauth.account.admin import EmailAddress
+
+
 from allauth.account.models import EmailConfirmation, EmailConfirmationHMAC
 from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
 from dj_rest_auth.registration.serializers import VerifyEmailSerializer
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.exceptions import APIException
 
 
 
@@ -111,3 +116,19 @@ class VerifyEmailView(APIView):
         qs = EmailConfirmation.objects.all_valid()
         qs = qs.select_related("email_address__user")
         return qs    
+
+class NewEmailConfirmation(APIView):
+    permission_classes = [AllowAny] 
+
+    def post(self, request):
+        user = get_object_or_404(User, email=request.data['email'])
+        emailAddress = EmailAddress.objects.filter(user=user, verified=True).exists()
+
+        if emailAddress:
+            return Response({'message': 'This email is already verified'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            try:
+                send_email_confirmation(request, user=user)
+                return Response({'message': 'Email confirmation sent'}, status=status.HTTP_201_CREATED)
+            except APIException:
+                return Response({'message': 'This email does not exist, please create a new account'}, status=status.HTTP_403_FORBIDDEN)
