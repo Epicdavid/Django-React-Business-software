@@ -3,7 +3,6 @@ from django.views.generic.base import TemplateView
 from allauth.account.signals import email_confirmed
 from django.dispatch import receiver
 from rest_framework import generics
-<<<<<<< HEAD
 from rest_framework.permissions import IsAuthenticated,AllowAny
 from django.views.decorators.csrf import csrf_exempt
 
@@ -30,21 +29,6 @@ from rest_framework.response import Response
 @api_view()
 def django_rest_auth_null():
     return Response(status=status.HTTP_400_BAD_REQUEST)
-=======
-from rest_framework.permissions import IsAuthenticated
-
-from allauth.account.utils import send_email_confirmation
-from rest_framework.views import APIView
-
-from . import models
-from . import serializers
-
-from rest_framework.authentication import TokenAuthentication
-from rest_framework import status
-from rest_framework.response import Response
-
-# Create your views here.
->>>>>>> 763aef708f5af0073a38ac0360bb7bee82c1bdbb
 
 class EmailView(TemplateView):
 
@@ -66,7 +50,6 @@ class EmailConfirmation(APIView):
             return Response({'message': 'Email already verified'}, status=status.HTTP_201_CREATED)
 
         send_email_confirmation(request, request.user)
-<<<<<<< HEAD
         return Response({'message': 'Email confirmation sent'}, status=status.HTTP_201_CREATED)    
 
 @csrf_exempt
@@ -128,6 +111,3 @@ class VerifyEmailView(APIView):
         qs = EmailConfirmation.objects.all_valid()
         qs = qs.select_related("email_address__user")
         return qs    
-=======
-        return Response({'message': 'Email confirmation sent'}, status=status.HTTP_201_CREATED)    
->>>>>>> 763aef708f5af0073a38ac0360bb7bee82c1bdbb
