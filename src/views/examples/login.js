@@ -185,7 +185,7 @@ class LoginPage extends React.Component {
                                                     <h6 className="link footer-link" color="info"><Link to="/register-page">Create Account</Link></h6>
                                                 </div>
                                                 <div className="pull-right mr-3 mb-3">
-                                                    <h6 className="link footer-link" color="info"><Link to="/support">Need Help?</Link></h6>
+                                                    <h6 className="link footer-link" color="info"><Link to="/support">Forgot Password?</Link></h6>
                                                 </div>
                                             </div>
 

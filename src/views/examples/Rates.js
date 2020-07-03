@@ -1,6 +1,6 @@
 
 import React from "react";
-import axios from "axios";
+
 // javascript plugin used to create scrollbars on windows
 // reactstrap components
 import {
@@ -38,7 +38,7 @@ class RatePage extends React.Component {
     }
     render() {
 
-        const { data, loading } = this.props;
+        const { data } = this.props;
 
 
 
