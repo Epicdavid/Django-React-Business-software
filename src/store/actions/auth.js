@@ -8,17 +8,18 @@ export const authStart = () => {
   };
 };
 
-export const authSuccess = user => {
+export const authSuccess = (user) => {
   return {
     type: actionTypes.AUTH_SUCCESS,
     user
   };
 };
 
-export const authFail = error => {
+export const authFail = (error, detail) => {
   return {
     type: actionTypes.AUTH_FAIL,
-    error: error
+    error: error,
+    detail: detail
   };
 };
 
@@ -37,30 +38,40 @@ export const checkAuthTimeout = expirationTime => {
   };
 };
 
-export const authLogin = (username, password) => {
+export const authLogin = (email, password) => {
   return dispatch => {
     dispatch(authStart());
     const user = {
-      username, password
+      email, password
     }
     axios
-      .post(url.BASE_URL + "/rest-auth/login/", user)
+      .post(url.BASE_URL + "rest-auth/login/", user)
       .then(res => {
-        const user = {
-          token: res.data.key,
-          username: res.data.user_detail.username,
-          expirationDate: new Date(new Date().getTime() + 3600 * 1000),
-          userId: res.data.user,
-          btc_wallet: res.data.user_detail.btc_wallet,
-          balance: res.data.user_detail.balance,
-          hash: res.data.user_detail.hash
+        if (res.data.key) {
+          const user = {
+            token: res.data.key,
+            username: res.data.user_detail.username,
+            expirationDate: new Date(new Date().getTime() + 3600 * 1000),
+            userId: res.data.user,
+            btc_wallet: res.data.user_detail.btc_wallet,
+            balance: res.data.user_detail.balance,
+            hash: res.data.user_detail.hash,
+          }
+          localStorage.setItem("user", JSON.stringify(user));
+          dispatch(authSuccess(user));
+          dispatch(checkAuthTimeout(3600));
         }
-        localStorage.setItem("user", JSON.stringify(user));
-        dispatch(authSuccess(user));
-        dispatch(checkAuthTimeout(3600));
+        if (res.data.detail) {
+          const detail = {
+            detail: res.data.detail
+          }
+          dispatch(authFail(null, detail));
+        }
+
       })
       .catch(err => {
         dispatch(authFail(err));
+        console.log(err)
       });
   };
 };
@@ -72,17 +83,26 @@ export const authSignup = (username, email, password1, password2, btc_wallet) =>
       username, email, password1, password2, btc_wallet,
     };
     axios
-      .post(url.BASE_URL + "/rest-auth/registration/", user)
+      .post(url.BASE_URL + "rest-auth/registration/", user)
       .then(res => {
-        const user = {
-          token: res.data.key,
-          username,
-          expirationDate: new Date(new Date().getTime() + 3600 * 1000),
+        if (res.data.key) {
+          const user = {
+            token: res.data.key,
+            username,
+            expirationDate: new Date(new Date().getTime() + 3600 * 1000),
 
+          }
+          localStorage.setItem("user", JSON.stringify(user));
+          dispatch(authSuccess(user));
+          dispatch(checkAuthTimeout(3600));
         }
-        localStorage.setItem("user", JSON.stringify(user));
-        dispatch(authSuccess(user));
-        dispatch(checkAuthTimeout(3600));
+
+        if (res.data.detail) {
+          const detail = {
+            detail: res.data.detail
+          }
+          dispatch(authFail(null, detail));
+        }
       })
       .catch(err => {
         dispatch(authFail(err));

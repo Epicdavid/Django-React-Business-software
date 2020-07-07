@@ -99,7 +99,8 @@ ACCOUNT_UNIQUE_EMAIL = True
 
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER':'users.serializers.UserSerializer',
-    'TOKEN_SERIALIZER':'users.serializers.TokenSerializer'
+    'TOKEN_SERIALIZER':'users.serializers.TokenSerializer',
+    'LOGIN_SERIALIZER': 'users.serializers.Login'
     
 }
 

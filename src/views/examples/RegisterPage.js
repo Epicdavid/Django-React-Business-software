@@ -250,6 +250,11 @@ class RegisterPage extends React.Component {
                           :
                           null
                         }
+                        {this.props.detail ?
+                          <Alert color="danger"><p>{this.props.detail.detail}</p></Alert>
+                          :
+                          null
+                        }
                         <Form className="form" onSubmit={this.handleSubmit}>
                           <Label for="error" className="control-label" >{this.state.errors["name"]}</Label>
 
@@ -461,9 +466,10 @@ class RegisterPage extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    error: state.error,
-    loading: state.loading,
-    token: state.token
+    error: state.auth.error,
+    loading: state.auth.loading,
+    token: state.auth.token,
+    detail: state.auth.detail
   };
 }
 

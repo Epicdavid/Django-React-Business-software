@@ -14,7 +14,6 @@ import {
     InputGroup,
     Container,
     Row,
-    Spinner,
     Alert,
     Button,
 } from "reactstrap";
@@ -44,7 +43,6 @@ class LoginPage extends React.Component {
         e.preventDefault();
         const { email, password } = this.state;
         this.props.login(email, password);
-        console.log(email, password)
     };
 
     componentDidMount() {
@@ -80,7 +78,7 @@ class LoginPage extends React.Component {
 
 
     render() {
-        const { error, token } = this.props;
+        const { error, token, detail } = this.props;
         const { email, password } = this.state;
         if (token) {
             return <Redirect to="/Dashboard"></Redirect>;
@@ -118,6 +116,10 @@ class LoginPage extends React.Component {
                                                     :
                                                     null
                                                 }
+                                                {this.props.detail ?
+                                                    <Alert color="danger" ><p>{this.props.detail.detail}</p></Alert>
+
+                                                    : null}
                                                 <Form className="form" onSubmit={this.onSubmit}>
                                                     <InputGroup
                                                         className={classnames({
@@ -164,16 +166,16 @@ class LoginPage extends React.Component {
                                                         />
                                                     </InputGroup>
                                                 </Form>
-                                                <div>
-                                                    <Spinner color="danger" />
-                                                </div>
                                             </CardBody>
 
 
                                             <div className="text-center card-footer">
                                                 {
                                                     this.props.loading ?
-                                                        <Spinner color="danger" type="grow" />
+                                                        <div className="loader loader-1">
+                                                            <div className="loader-outter"></div>
+                                                            <div className="loader-inner"></div>
+                                                        </div>
                                                         :
 
                                                         <Button className="btn-round btn btn-primary btn-lg btn-block" onClick={this.onSubmit}>
@@ -235,9 +237,10 @@ class LoginPage extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        error: state.error,
-        loading: state.loading,
-        token: state.token
+        error: state.auth.error,
+        loading: state.auth.loading,
+        token: state.auth.token,
+        detail: state.auth.detail
     }
 }
 

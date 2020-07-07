@@ -10,6 +10,7 @@ const initialState = {
   balance: null,
   hash: null,
   btc_wallet: null,
+  detail: null
 
 };
 
@@ -29,14 +30,15 @@ const authSuccess = (state, action) => {
     userId: action.user.userId,
     btc_wallet: action.user.btc_wallet,
     balance: action.user.balance,
-    hash: action.user.hash
+    hash: action.user.hash,
   });
 };
 
 const authFail = (state, action) => {
   return updateObject(state, {
     error: action.error,
-    loading: false
+    loading: false,
+    detail: action.detail
   });
 };
 

@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated,AllowAny
 from django.views.decorators.csrf import csrf_exempt
 
 from allauth.account.utils import send_email_confirmation
-from rest_framework.decorators import api_view, APIView
+from rest_framework.decorators import api_view
 from .models import * 
 from . import serializers
 import json
@@ -22,9 +22,11 @@ from allauth.account.admin import EmailAddress
 from allauth.account.models import EmailConfirmation, EmailConfirmationHMAC
 from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
-from rest_auth.registration.serializers import VerifyEmailSerializer
+from rest_auth.registration.serializers import VerifyEmailSerializer,RegisterSerializer
 from rest_framework import status
+from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.generics import GenericAPIView, RetrieveUpdateAPIView
 from rest_framework.exceptions import APIException
 
 
@@ -82,6 +84,32 @@ def validateEmailToken(request):
     
     return JsonResponse(res) 
 
+class PasswordResetView(GenericAPIView):
+    """
+    Calls Django Auth PasswordResetForm save method.
+    Accepts the following POST parameters: email
+    Returns the success/fail message.
+    """
+    serializer_class = serializers.PasswordResetSerializer
+    permission_classes = (AllowAny,)
+
+    def post(self, request, *args, **kwargs):
+        # Create a serializer with request.data
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid
+        return Response(
+            {"detail": _("invalid email")},
+            status=status.HTTP_200_OK
+        )
+        serializer.save()
+        return Response(
+            {"detail": _("Password reset e-mail has been sent.")},
+            status=status.HTTP_200_OK
+        )
+
+        
+        # Return the success message with OK HTTP status
+        
 
 class VerifyEmailView(APIView):
 
@@ -132,3 +160,8 @@ class NewEmailConfirmation(APIView):
                 return Response({'message': 'Email confirmation sent'}, status=status.HTTP_201_CREATED)
             except APIException:
                 return Response({'message': 'This email does not exist, please create a new account'}, status=status.HTTP_403_FORBIDDEN)
+
+
+                
+
+

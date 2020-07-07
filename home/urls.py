@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include, re_path
 from allauth.account.views import confirm_email
-from users.views import EmailView,EmailConfirmation,django_rest_auth_null,validateEmailToken,NewEmailConfirmation
+from users.views import EmailView,EmailConfirmation,django_rest_auth_null,validateEmailToken,NewEmailConfirmation,PasswordResetView
 from rest_auth.registration.views import VerifyEmailView, RegisterView
 from django.views.generic import TemplateView
 
@@ -21,6 +21,8 @@ urlpatterns = [
         name='password_reset_confirm'),
     path('listApi/',include('users.api.order.urls')),
     path('resend-verification-email/', NewEmailConfirmation.as_view(), name='resend-email-confirmation'),
+    path('password/reset/', PasswordResetView.as_view(),
+        name='rest_password_reset'),
     re_path(r'^account-confirm-email/', VerifyEmailView.as_view(),
      name='account_email_verification_sent'),
     path('admin/', admin.site.urls),

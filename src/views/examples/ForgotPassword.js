@@ -26,8 +26,7 @@ import ExamplesNavbar from "components/Navbars/ExamplesNavbar.js";
 import { Redirect, } from "react-router-dom";
 class ForgotPass extends React.Component {
     state = {
-        password: "",
-        password2: "",
+        email: "",
         detail: null,
         errors: {}
 
@@ -38,36 +37,25 @@ class ForgotPass extends React.Component {
     }
 
 
-    handlePass = e => {
-        this.setState({ passwordFocus: false })
-        let { password } = this.state;
+    handleEmail = e => {
+        this.setState({ emailFocus: false })
+        let { email } = this.state
         let errors = {};
         let formIsValid = true;
-        if (!password) {
+        //Email
+        if (!email) {
             formIsValid = false;
-            errors["password"] = "Input Password"
+            errors["email"] = "Cannot be empty";
         }
 
-        if (typeof password !== "undefined") {
-            if (!password.match(/^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z]{6,}$/)) {
+        if (typeof email !== "undefined") {
+            let lastAtPos = email.lastIndexOf('@');
+            let lastDotPos = email.lastIndexOf('.');
+
+            if (!(lastAtPos < lastDotPos && lastAtPos > 0 && email.indexOf('@@') === -1 && lastDotPos > 2 && (email.length - lastDotPos) > 2)) {
                 formIsValid = false;
-                errors["password"] = "Password must contain at least one letter,number, and be longer than six charaters.";
+                errors["email"] = "Email is not valid";
             }
-        }
-
-        this.setState({ errors: errors });
-        return formIsValid;
-    }
-
-    confirmpassword = e => {
-        this.setState({ password2Focus: false })
-        let { password, password2 } = this.state;
-        let errors = {};
-        let formIsValid = true;
-
-        if (!password2.match(password)) {
-            formIsValid = false
-            errors["password2"] = "Passwords do not match"
         }
         this.setState({ errors: errors });
         return formIsValid;
@@ -75,25 +63,24 @@ class ForgotPass extends React.Component {
 
 
     checkform() {
-        let { password, password2 } = this.state;
+        let { email } = this.state;
         let errors = {};
         let formIsValid = true;
-        if (!password) {
+        if (!email) {
             formIsValid = false;
-            errors["password"] = "Input Password"
+            errors["email"] = "Cannot be empty";
         }
 
-        if (typeof password !== "undefined") {
-            if (!password.match(/^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z]{6,}$/)) {
+        if (typeof email !== "undefined") {
+            let lastAtPos = email.lastIndexOf('@');
+            let lastDotPos = email.lastIndexOf('.');
+
+            if (!(lastAtPos < lastDotPos && lastAtPos > 0 && email.indexOf('@@') === -1 && lastDotPos > 2 && (email.length - lastDotPos) > 2)) {
                 formIsValid = false;
-                errors["password"] = "Password must contain at least one letter,number, and be longer than six charaters.";
+                errors["email"] = "Email is not valid";
             }
         }
 
-        if (!password2.match(password)) {
-            formIsValid = false
-            errors["password2"] = "Passwords do not match"
-        }
 
         this.setState({ errors: errors });
         return formIsValid;
@@ -114,18 +101,22 @@ class ForgotPass extends React.Component {
     }
     onSubmit = e => {
         e.preventDefault();
+
         if (this.checkform()) {
-            const { password, password2, token, uid, } = this.state;
+            const { email } = this.state;
             this.setState({ loading: true })
-            axios.post(url.BASE_URL + '/rest-auth/password/reset/confirm/', {
-                new_password1: password,
-                new_password2: password2,
-                uid: uid,
-                token: token,
+            axios.post(url.BASE_URL + 'password/reset/', {
+                email: email
             }
 
             ).then((res) => {
-                this.setState({ detail: res.detail, loading: false })
+                this.setState({
+                    detail: res.data.detail,
+                    loading: false,
+
+
+                })
+                console.log(res)
             }).catch(err => {
                 console.log(err);
                 setTimeout(() => {
@@ -171,7 +162,7 @@ class ForgotPass extends React.Component {
 
 
     render() {
-        const { loading, password, password2 } = this.state;
+        const { email, loading } = this.state;
 
         return (
             <>
@@ -190,66 +181,48 @@ class ForgotPass extends React.Component {
                                             </CardHeader>
                                             <h6 className="card-title" style={{ textAlign: 'center' }}>Password Reset</h6>
 
+
                                             <CardBody>
-                                                {this.state.detail ?
-                                                    <Alert color="info"> <p>{this.state.detail}</p></Alert>
+                                                {this.state.redirect ?
+                                                    <p style={{ textAlign: 'center', color: "#00bf81" }} >Redirecting to Login....</p>
                                                     :
-                                                    null
+                                                    <div>
+                                                        {this.state.detail ?
+                                                            <Alert color="info"> <p>{this.state.detail}</p></Alert>
+                                                            :
+                                                            null
+                                                        }
+                                                        <Form className="form" id="myForm" onSubmit={this.onSubmit}>
+                                                            <Label for="error" className="control-label">{this.state.errors["email"]}</Label>
+
+                                                            <InputGroup
+                                                                className={this.state.errors["email"] ? "has-danger" : classnames({
+                                                                    "input-group-focus": this.state.emailFocus
+                                                                })}>
+                                                                <InputGroupAddon addonType="prepend">
+                                                                    <InputGroupText>
+                                                                        <i className="tim-icons icon-email-85" />
+                                                                    </InputGroupText>
+                                                                </InputGroupAddon>
+                                                                <Input
+                                                                    onChange={this.handleChange}
+                                                                    value={email}
+                                                                    name="email"
+                                                                    placeholder={
+                                                                        this.state.errors["email"] ?
+                                                                            this.state.errors['email']
+                                                                            :
+                                                                            "Email"
+                                                                    }
+                                                                    type="text"
+                                                                    onFocus={e => this.setState({ emailFocus: true })}
+                                                                    onBlur={this.handleEmail}
+                                                                />
+                                                            </InputGroup>
+
+                                                        </Form>
+                                                    </div>
                                                 }
-                                                <Form className="form" onSubmit={this.onSubmit}>
-                                                    <Label for="error" className="control-label">{this.state.errors["password"]}</Label>
-
-                                                    <InputGroup
-                                                        className={this.state.errors["password"] ? "has-danger" : classnames({
-                                                            "input-group-focus": this.state.passwordFocus
-                                                        })}
-                                                    >
-                                                        <InputGroupAddon addonType="prepend">
-                                                            <InputGroupText>
-                                                                <i className="tim-icons icon-lock-circle" />
-                                                            </InputGroupText>
-                                                        </InputGroupAddon>
-                                                        <Input
-                                                            onChange={this.handleChange}
-                                                            value={password}
-                                                            name="password"
-                                                            placeholder="New Password"
-                                                            type="password"
-                                                            onFocus={e =>
-                                                                this.setState({ passwordFocus: true })
-                                                            }
-                                                            onBlur={
-                                                                this.handlePass
-                                                            }
-                                                        />
-                                                    </InputGroup>
-                                                    <Label for="error" className="control-label">{this.state.errors["password2"]}</Label>
-                                                    <InputGroup
-                                                        className={this.state.errors["password2"] ? "has-danger" : classnames({
-                                                            "input-group-focus": this.state.password2Focus
-                                                        })}
-                                                    >
-                                                        <InputGroupAddon addonType="prepend">
-                                                            <InputGroupText>
-                                                                <i className="tim-icons icon-lock-circle" />
-                                                            </InputGroupText>
-                                                        </InputGroupAddon>
-                                                        <Input
-                                                            onChange={this.handleChange}
-                                                            value={password2}
-                                                            name="password2"
-                                                            placeholder="Confirm Password"
-                                                            type="password"
-                                                            onFocus={e =>
-                                                                this.setState({ password2Focus: true })
-                                                            }
-                                                            onBlur={
-                                                                this.confirmpassword
-                                                            }
-                                                        />
-                                                    </InputGroup>
-                                                </Form>
-
                                             </CardBody>
 
 
@@ -268,9 +241,6 @@ class ForgotPass extends React.Component {
 
                                                 }
                                             </div>
-
-
-
                                         </Card>
                                     </div>
                                 </Row>

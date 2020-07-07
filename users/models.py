@@ -173,5 +173,4 @@ def handle_user_signed_up(sender, request, user, **kwargs):
             print(referra.user.id)
             profile.referredBy = User.objects.get(id=referra.user.id)
             profile.save()
-            print(profile.referredBy)
-    print(profile.referredBy)
+    profile.save()        
