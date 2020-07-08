@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.exceptions import APIException
 from django.utils.encoding import force_text
 from rest_framework.views import exception_handler
-
+import re
 
 from rest_framework import serializers,exceptions
 from rest_auth.registration.serializers import RegisterSerializer
@@ -23,7 +23,7 @@ from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import get_user_model, authenticate
 
-
+from django.contrib.auth.validators import ASCIIUsernameValidator
 
 
 class Login(LoginSerializer):
@@ -186,9 +186,11 @@ class CustomValidation(APIException):
                 self.detail = {field: force_text(detail)}
             else: self.detail = {'detail': force_text(self.default_detail)}
 
-class SignupSerializer(RegisterSerializer):
-    btc_wallet = serializers.CharField(max_length=300)    
 
+
+
+class SignupSerializer(RegisterSerializer):
+    btc_wallet = serializers.CharField(max_length=300) 
     class Meta:
         model = User
         fields = ('email','username','password','btc_wallet','user') 
@@ -204,6 +206,22 @@ class SignupSerializer(RegisterSerializer):
         }
 
 
+
+       
+
+    def validate_username(self, value):
+        existing = User.objects.filter(username__iexact=value)
+        print("done")
+        if existing.exists():
+            print("done")
+            raise CustomValidation(
+                    "A user is already registered with this name.","detail",status_code=status.HTTP_200_OK)
+        if not re.match(r'^[\w.@+-]+\Z', value):
+            raise CustomValidation(
+                    "Enter a valid username. This value may contain only English letters, numbers, and @/./+/-/_ characters.","detail",status_code=status.HTTP_200_OK)
+ 
+        else:
+            return value    
 
     def validate_email(self, email):
         email = get_adapter().clean_email(email)

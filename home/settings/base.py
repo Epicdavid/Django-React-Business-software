@@ -96,6 +96,8 @@ ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_REQUIRED = True
 AUTH_USER_MODEL = 'users.User'
 ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_UNIQUE_USERNAME = False
+ACCOUNT_USERNAME_VALIDATORS = 'home.settings.validator.custom_usename_validator'
 
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER':'users.serializers.UserSerializer',
