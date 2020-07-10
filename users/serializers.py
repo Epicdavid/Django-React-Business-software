@@ -107,12 +107,12 @@ class Login(LoginSerializer):
             if not user.is_active:
                 msg = _('User account is disabled.')
                 raise CustomValidation(
-                    'User account is disabled.',"detail",status_code=status.HTTP_200_OK)
+                    'User account is disabled.',"error",status_code=status.HTTP_200_OK)
 
         else:
             msg = _('Unable to log in with provided credentials.')
             raise CustomValidation(
-                   'Unable to log in with provided credentials.',"detail",status_code=status.HTTP_200_OK)
+                   'Unable to log in with provided credentials.',"error",status_code=status.HTTP_200_OK)
 
 
         # If required, is the email verified?
@@ -121,7 +121,7 @@ class Login(LoginSerializer):
             if app_settings.EMAIL_VERIFICATION == app_settings.EmailVerificationMethod.MANDATORY:
                 email_address = user.emailaddress_set.get(email=user.email)
                 if not email_address.verified:
-                    raise CustomValidation('E-mail is not verified.',"detail",status_code=status.HTTP_200_OK)
+                    raise CustomValidation('E-mail is not verified.',"error",status_code=status.HTTP_200_OK)
 
         attrs['user'] = user
         return attrs
@@ -147,14 +147,13 @@ class PasswordResetSerializer(serializers.Serializer):
             raise serializers.ValidationError(self.reset_form.errors)
 
         ###### FILTER YOUR USER MODEL ######
-        if not get_user_model().objects.filter(email=value).exists():
-            raise serializers.ValidationError(_('Invalid e-mail address'))
-
+        
         return value 
 
 
     def save(self):
         request = self.context.get('request')
+        print(self)
         # Set some values to trigger the send_email method.
         opts = {
             'use_https': request.is_secure(),
@@ -184,7 +183,7 @@ class CustomValidation(APIException):
             if status_code is not None:self.status_code = status_code
             if detail is not None:
                 self.detail = {field: force_text(detail)}
-            else: self.detail = {'detail': force_text(self.default_detail)}
+            else: self.detail = {'error': force_text(self.default_detail)}
 
 
 
@@ -211,14 +210,12 @@ class SignupSerializer(RegisterSerializer):
 
     def validate_username(self, value):
         existing = User.objects.filter(username__iexact=value)
-        print("done")
         if existing.exists():
-            print("done")
             raise CustomValidation(
-                    "A user is already registered with this name.","detail",status_code=status.HTTP_200_OK)
+                    "A user is already registered with this name.","error",status_code=status.HTTP_200_OK)
         if not re.match(r'^[\w.@+-]+\Z', value):
             raise CustomValidation(
-                    "Enter a valid username. This value may contain only English letters, numbers, and @/./+/-/_ characters.","detail",status_code=status.HTTP_200_OK)
+                    "username may contain only letters, numbers.","error",status_code=status.HTTP_200_OK)
  
         else:
             return value    
@@ -228,7 +225,7 @@ class SignupSerializer(RegisterSerializer):
         if allauth_settings.UNIQUE_EMAIL:
             if email and email_address_exists(email):
                 raise CustomValidation(
-                    "A user is already registered with this e-mail address.","detail",status_code=status.HTTP_200_OK)
+                    "A user is already registered with this e-mail address.","error",status_code=status.HTTP_200_OK)
         return email
 
     def save(self, request):
@@ -239,15 +236,6 @@ class SignupSerializer(RegisterSerializer):
         adapter.save_user(request, user, self)
         return user
 
-    def after_signup():
-        action = Referral.record_response(self.request, "USER_SIGNUP")
-        makp = action.referral.id
-        super(SignupView,self).after_signup()
-        if action is not None:
-            referral = Referral.objects.get(id=action.referral.id)
-            profile = Profile.objects.get(user=self.created_user)
-            profile.parent = Profile.objects.get(user=referral.user)
-            profile.save()
 
 
 class TokenSerializer(serializers.ModelSerializer):

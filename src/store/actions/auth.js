@@ -15,11 +15,11 @@ export const authSuccess = (user) => {
   };
 };
 
-export const authFail = (error, detail) => {
+export const authFail = (detail) => {
   return {
     type: actionTypes.AUTH_FAIL,
-    error: error,
-    detail: detail
+    error: detail,
+    detail: null,
   };
 };
 
@@ -61,17 +61,17 @@ export const authLogin = (email, password) => {
           dispatch(authSuccess(user));
           dispatch(checkAuthTimeout(3600));
         }
-        if (res.data.detail) {
+        if (res.data.error) {
           const detail = {
-            detail: res.data.detail
+            detail: res.data.error
           }
-          dispatch(authFail(null, detail));
+          dispatch(authFail(detail));
         }
 
       })
-      .catch(err => {
-        dispatch(authFail(err));
-        console.log(err)
+      .catch(fail => {
+        console.log(fail)
+        dispatch(authFail());
       });
   };
 };
@@ -85,10 +85,12 @@ export const authSignup = (username, email, password1, password2, btc_wallet) =>
     axios
       .post(url.BASE_URL + "rest-auth/registration/", user)
       .then(res => {
-        if (res.data.key) {
+        console.log(res)
+        if (res.data.detail) {
           const user = {
-            token: res.data.key,
+            detail: res.data.detail,
             username,
+            email,
             expirationDate: new Date(new Date().getTime() + 3600 * 1000),
 
           }
@@ -97,15 +99,15 @@ export const authSignup = (username, email, password1, password2, btc_wallet) =>
           dispatch(checkAuthTimeout(3600));
         }
 
-        if (res.data.detail) {
+        if (res.data.error) {
           const detail = {
-            detail: res.data.detail
+            detail: res.data.error
           }
-          dispatch(authFail(null, detail));
+          dispatch(authFail(detail));
         }
       })
-      .catch(err => {
-        dispatch(authFail(err));
+      .catch(fail => {
+        console.log(fail);
       });
   };
 };

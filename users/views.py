@@ -96,24 +96,18 @@ class PasswordResetView(GenericAPIView):
     def post(self, request, *args, **kwargs):
         # Create a serializer with request.data
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid
-        return Response(
-            {"detail": _("invalid email")},
-            status=status.HTTP_200_OK
-        )
+        serializer.is_valid(raise_exception=True)
+
         serializer.save()
+        # Return the success message with OK HTTP status
         return Response(
             {"detail": _("Password reset e-mail has been sent.")},
             status=status.HTTP_200_OK
         )
 
-        
-        # Return the success message with OK HTTP status
-        
-
 class VerifyEmailView(APIView):
 
-    def get_serializer(self, *args, **kwargs):
+    def get_serializer(self, *args, **kwargs): 
         return VerifyEmailSerializer(*args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -162,6 +156,6 @@ class NewEmailConfirmation(APIView):
                 return Response({'message': 'This email does not exist, please create a new account'}, status=status.HTTP_403_FORBIDDEN)
 
 
-                
+
 
 

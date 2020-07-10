@@ -10,8 +10,8 @@ const initialState = {
   balance: null,
   hash: null,
   btc_wallet: null,
-  detail: null
-
+  detail: null,
+  email: null
 };
 
 const authStart = (state, action) => {
@@ -31,6 +31,8 @@ const authSuccess = (state, action) => {
     btc_wallet: action.user.btc_wallet,
     balance: action.user.balance,
     hash: action.user.hash,
+    detail: action.user.detail,
+    email: action.user.email
   });
 };
 

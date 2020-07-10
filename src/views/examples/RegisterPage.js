@@ -52,11 +52,35 @@ class RegisterPage extends React.Component {
       errors["name"] = "Cannot be empty";
     }
 
+
     this.setState({ errors: errors });
     return formIsValid;
   }
 
+  handleWallet = e => {
+    this.setState({ walletFocus: false })
+    let WAValidator = require('wallet-address-validator');
 
+    let { btc_wallet } = this.state;
+    let errors = {};
+    let formIsValid = true;
+
+    let valid = WAValidator.validate(btc_wallet, 'BTC');
+    if (!btc_wallet) {
+      formIsValid = false;
+      errors["wallet"] = "Cannot be empty";
+    }
+
+    if (!valid) {
+      formIsValid = false
+      errors["wallet"] = "Invalid Bitcoin wallet address";
+    }
+
+    this.setState({ errors: errors });
+    return formIsValid;
+
+    // This will log 'This is a valid address' to the console.
+  }
 
   handleEmail = e => {
     this.setState({ emailFocus: false })
@@ -122,15 +146,33 @@ class RegisterPage extends React.Component {
   };
 
   checkform() {
-    let { username, email, password1, password2 } = this.state;
+    let { username, email, password1, password2, btc_wallet } = this.state;
     let errors = {};
     let formIsValid = true;
+    let WAValidator = require('wallet-address-validator');
+
+
+    let valid = WAValidator.validate(btc_wallet, 'BTC');
+
+    if (!btc_wallet) {
+      formIsValid = false;
+      errors["wallet"] = "Cannot be empty";
+    }
+
+    if (!valid) {
+      formIsValid = false
+      errors["wallet"] = "Invalid Bitcoin wallet address";
+    }
+
+
 
     //Name
     if (!username) {
       formIsValid = false;
       errors["name"] = "Cannot be empty";
     }
+
+
 
 
     if (!email) {
@@ -212,10 +254,10 @@ class RegisterPage extends React.Component {
   };
   render() {
     const { username, email, password1, password2, btc_wallet } = this.state;
-    const { error, token } = this.props
+    const { error, detail, loading } = this.props
 
-    if (token) {
-      return <Redirect to="/profile-page"></Redirect>;
+    if (detail) {
+      return <Redirect to="/your-email-sent"></Redirect>;
     }
 
     return (
@@ -245,13 +287,9 @@ class RegisterPage extends React.Component {
                       <h6 className="collapse-brand" xs="6" style={{ textAlign: 'center' }}>REGISTER</h6>
 
                       <CardBody>
-                        {this.props.error ?
-                          <Alert color="danger">{error && <p>{this.props.error.message}</p>}</Alert>
-                          :
-                          null
-                        }
-                        {this.props.detail ?
-                          <Alert color="danger"><p>{this.props.detail.detail}</p></Alert>
+
+                        {error ?
+                          <Alert color="danger"><p>{error.detail}</p></Alert>
                           :
                           null
                         }
@@ -315,15 +353,12 @@ class RegisterPage extends React.Component {
                             />
                           </InputGroup>
 
-
-
+                          <Label for="error" className="control-label">{this.state.errors["password1"]}</Label>
                           <InputGroup
                             className={this.state.errors["password1"] ? "has-danger" : classnames({
                               "input-group-focus": this.state.passwordFocus
                             })}
                           >
-                            <Label for="error" className="control-label">{this.state.errors["password1"]}</Label>
-
                             <InputGroupAddon addonType="prepend">
                               <InputGroupText>
                                 <i className="tim-icons icon-lock-circle" />
@@ -344,6 +379,7 @@ class RegisterPage extends React.Component {
                               }
                             />
                           </InputGroup>
+
                           <Label for="error" className="control-label">{this.state.errors["password2"]}</Label>
                           <InputGroup
                             className={this.state.errors["password2"] ? "has-danger" : classnames({
@@ -374,9 +410,10 @@ class RegisterPage extends React.Component {
                               }
                             />
                           </InputGroup>
+                          <Label for="error" className="control-label">{this.state.errors["wallet"]}</Label>
                           <InputGroup
-                            className={classnames({
-                              "input-group-focus": this.state.btc_walletFocus
+                            className={this.state.errors["wallet"] ? "has-danger" : classnames({
+                              "input-group-focus": this.state.walletFocus
                             })}
                           >
                             <InputGroupAddon addonType="prepend">
@@ -388,13 +425,17 @@ class RegisterPage extends React.Component {
                               onChange={this.handleChange}
                               value={btc_wallet}
                               name="btc_wallet"
-                              placeholder="BTC Wallet Address"
+                              placeholder={
+                                this.state.errors["wallet"] ?
+                                  this.state.errors["wallet"]
+                                  :
+                                  "Your BTC wallet address"
+                              }
                               type="text"
                               onFocus={e =>
-                                this.setState({ btc_walletFocus: true })
+                                this.setState({ walletFocus: true })
                               }
-                              onBlur={e =>
-                                this.setState({ btc_walletFocus: false })
+                              onBlur={this.handleWallet
                               }
                             />
                           </InputGroup>
@@ -414,10 +455,17 @@ class RegisterPage extends React.Component {
                         </Form>
                       </CardBody>
                       <div className="text-center card-footer">
-
-                        <Link to="/profile-page" className="btn-round btn btn-primary btn-lg btn-block" onClick={this.handleSubmit}>
-                          Get Started
+                        {
+                          loading ?
+                            <div className="loader loader-1">
+                              <div className="loader-outter"></div>
+                              <div className="loader-inner"></div>
+                            </div>
+                            :
+                            <Link to="/profile-page" className="btn-round btn btn-primary btn-lg btn-block" onClick={this.handleSubmit}>
+                              Get Started
                         </Link>
+                        }
 
                       </div>
                     </Card>
@@ -469,7 +517,7 @@ const mapStateToProps = state => {
     error: state.auth.error,
     loading: state.auth.loading,
     token: state.auth.token,
-    detail: state.auth.detail
+    detail: state.auth.detail,
   };
 }
 
