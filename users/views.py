@@ -23,6 +23,7 @@ from allauth.account.models import EmailConfirmation, EmailConfirmationHMAC
 from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
 from rest_auth.registration.serializers import VerifyEmailSerializer,RegisterSerializer
+from rest_auth.serializers import PasswordResetSerializer
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
