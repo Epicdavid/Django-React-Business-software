@@ -13,10 +13,10 @@ import statReducer from "./store/reducers/stats";
 import chartReducer from "./store/reducers/chart";
 import "assets/css/loader.css";
 
-import "assets/css/nucleo-icons.css";
+/*import "assets/css/nucleo-icons.css";
 import "assets/scss/blk-design-system-react.scss?v=1.1.0";
 import "assets/demo/demo.css";
-
+*/
 
 import "assets/admin/scss/black-dashboard-react.scss";
 import "assets/admin/demo/demo.css";

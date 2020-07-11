@@ -126,7 +126,7 @@ class Order(models.Model):
         
 
 
-class Stats(models.Model):
+class Stat(models.Model):
     user = models.ForeignKey(User, related_name="stats", on_delete=models.CASCADE)
     newprofit = models.DecimalField(max_digits=15, decimal_places=0, default=0)
     storage = models.DecimalField(max_digits=15, decimal_places=0, default=0)

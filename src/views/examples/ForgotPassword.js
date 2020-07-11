@@ -110,13 +110,19 @@ class ForgotPass extends React.Component {
             }
 
             ).then((res) => {
-                this.setState({
-                    detail: res.data.detail,
-                    loading: false,
+                if (res.data.detail) {
+                    this.setState({
+                        detail: res.data.detail,
+                        loading: false,
+                    })
+                }
+                if (res.data.error) {
+                    this.setState({
+                        detail: res.data.error,
+                        loading: false,
+                    })
+                }
 
-
-                })
-                console.log(res)
             }).catch(err => {
                 console.log(err);
                 setTimeout(() => {
