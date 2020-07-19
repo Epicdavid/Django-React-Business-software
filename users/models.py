@@ -128,7 +128,7 @@ class Order(models.Model):
 class CompletedKit(models.Model):
     user = models.ForeignKey(User, related_name="completed_kits", on_delete=models.CASCADE)
     product = models.ForeignKey(Product, related_name="completed_kits", on_delete=models.CASCADE)
-    name = models.CharField(max_length=312, blank=True, null=True)
+    amount = models.DecimalField(max_digits=15, decimal_places=2,default=0.00)
     history = HistoricalRecords()
 
 
