@@ -125,6 +125,17 @@ class Order(models.Model):
         super().save(*args, **kwargs)
         
 
+class CompletedKit(models.Model):
+    user = models.ForeignKey(User, related_name="completed_kits", on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name="completed_kits", on_delete=models.CASCADE)
+    name = models.CharField(max_length=312, blank=True, null=True)
+    history = HistoricalRecords()
+
+
+    def __str__(self):
+        return self.product.name
+
+
 
 class Stat(models.Model):
     user = models.ForeignKey(User, related_name="stats", on_delete=models.CASCADE)

@@ -38,6 +38,18 @@ from rest_framework.exceptions import APIException
 def django_rest_auth_null():
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
+
+class UpdateProfile(GenericAPIView):
+    serializer_class = serializers.ProfileSerializer
+    
+
+
+    
+
+
+
+
+
 class EmailView(TemplateView):
 
     template_name = "account/email/email_confirmation_signup_message.html"

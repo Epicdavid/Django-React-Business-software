@@ -263,6 +263,8 @@ class TokenSerializer(serializers.ModelSerializer):
         balance = serializer_data.get('account_balance')
         last = serializer_data.get('last_login')
         last_login = datetime.strptime(last, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%I:%M%p on %d %B %Y')
+        activeA = serializer_data.get('active_affiliates')
+        activeP = serializer_data.get('active_package')
         
         
         return{
@@ -275,7 +277,10 @@ class TokenSerializer(serializers.ModelSerializer):
             'balance': balance,
             'last_login': last_login,
             'Link':ref,
-            "referral": referral
+            "referral": referral,
+            "last_login": last_login,
+            "activeA": activeA,
+            "activeP": activeP
             
         }
 
