@@ -13,7 +13,7 @@ urlpatterns = [
     path('mail/', EmailView.as_view()),
     path('registration/verify-email/', VerifyEmailView.as_view(), name='rest_verify_email'),
     path('verify/', validateEmailToken),
-    path('update-profile/', UpdateProfile),
+    re_path(r'update-profile/(?P<pk>\d+)/', UserPartialUpdateView.as_view(), name="updateProfile"),
     re_path(r'^rest-auth/', include('rest_auth.urls')),
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
     path('api/', include('users.api.urls')),

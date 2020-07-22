@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated,AllowAny
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.mixins import UpdateModelMixin
 
 from allauth.account.utils import send_email_confirmation
 from rest_framework.decorators import api_view
@@ -39,12 +40,35 @@ def django_rest_auth_null():
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class UpdateProfile(GenericAPIView):
-    serializer_class = serializers.ProfileSerializer
+
     
 
 
-    
+class UserPartialUpdateView(GenericAPIView, UpdateModelMixin):
+    '''
+    You just need to provide the field which is to be modified.
+    '''
+    queryset = User.objects.all()
+    serializer_class = serializers.UpdateUserSerializer
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        print(serializer)
+        serializer.save()
+        return Response(serializer.data)
+
+    def perform_update(self, serializer):
+        serializer.save()
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+          
+          return self.partial_update(request, *args, **kwargs)    
 
 
 

@@ -184,6 +184,12 @@ class CustomValidation(APIException):
 
 
 
+class UpdateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('email','btc_wallet') 
+
+
 
 class SignupSerializer(RegisterSerializer):
     btc_wallet = serializers.CharField(max_length=300) 
@@ -201,9 +207,6 @@ class SignupSerializer(RegisterSerializer):
             'email': self.validated_data.get('email', '')
         }
 
-
-
-       
 
     def validate_username(self, value):
         existing = User.objects.filter(username__iexact=value)
