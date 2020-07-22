@@ -22,6 +22,12 @@ from django.urls import reverse_lazy
 # Create your models here.
 
 class User(AbstractUser):
+    first_name = models.CharField(max_length=300,blank=True, null=True)
+    last_name  = models.CharField(max_length=300,blank=True, null=True)
+    address = models.CharField(max_length=300,blank=True, null=True)
+    city = models.CharField(max_length=200,blank=True, null=True)
+    country = models.CharField(max_length=200,blank=True, null=True)
+    zip_code =models.IntegerField(blank=True, null=True)
     is_student = models.BooleanField(default=False)
     btc_wallet = models.CharField(max_length=300)
     date_joined = models.DateTimeField(auto_now_add=True)

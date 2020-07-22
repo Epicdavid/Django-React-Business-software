@@ -187,7 +187,7 @@ class CustomValidation(APIException):
 class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('email','btc_wallet') 
+        fields = ('email','btc_wallet','first_name','last_name','address','city','country','zip_code') 
 
 
 
