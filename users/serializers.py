@@ -1,4 +1,5 @@
 from allauth.account import app_settings as allauth_settings
+from allauth.account.models import EmailAddress
 from allauth.utils import (email_address_exists,
                             get_username_max_length)
 from allauth.account.utils import setup_user_email
@@ -185,11 +186,28 @@ class CustomValidation(APIException):
 
 
 class UpdateUserSerializer(serializers.ModelSerializer):
+
+    is_verified = serializers.SerializerMethodField()
+
+    def get_is_verified(self, user):    
+        return (user.emailaddress_set.filter().exists())
+
     class Meta:
         model = User
-        fields = ('email','btc_wallet','first_name','last_name','address','city','country','zip_code') 
+        fields = ('email','btc_wallet','first_name','last_name','address','city','country','zip_code','is_verified') 
 
+    def update(self, instance, validated_data):
+        new_email = validated_data.pop('email', None)
+        user = super(UpdateUserSerializer, self).update(instance, validated_data)
 
+       
+        if new_email:
+            context = self.context
+            request = context.get('request', None)
+            if request:
+                EmailAddress.objects.add_email(request, user, new_email, confirm=True)
+
+        return user
 
 class SignupSerializer(RegisterSerializer):
     btc_wallet = serializers.CharField(max_length=300) 
