@@ -112,7 +112,7 @@ class LoginPage extends React.Component {
 
                                             <CardBody>
                                                 {this.props.error ?
-                                                    <Alert color="danger">{error && <p>{this.props.error.message}</p>}</Alert>
+                                                    <Alert color="danger">{error && <p>{this.props.error.detail}</p>}</Alert>
                                                     :
                                                     null
                                                 }

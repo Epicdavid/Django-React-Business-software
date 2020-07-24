@@ -277,6 +277,8 @@ class TokenSerializer(serializers.ModelSerializer):
         is_student = serializer_data.get('is_student')
         is_staff = serializer_data.get('is_staff')
         username = serializer_data.get('username')
+        email = serializer_data.get('email')
+        email_verified = serializer_data.get('email_verified')
         btc_wallet = serializer_data.get('btc_wallet')
         time = serializer_data.get('date_joined')
         date = datetime.strptime(time, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%B')
@@ -286,11 +288,18 @@ class TokenSerializer(serializers.ModelSerializer):
         last_login = datetime.strptime(last, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%I:%M%p on %d %B %Y')
         activeA = serializer_data.get('active_affiliates')
         activeP = serializer_data.get('active_package')
-        
-        
+        first_name = serializer_data.get('first_name')
+        last_name = serializer_data.get('last_name')
+        country = serializer_data.get('country')
+        address = serializer_data.get('address')
+        zip_code = serializer_data.get('zip_code')
+        city = serializer_data.get('city')
+            
+            
         return{
             'is_client': is_student,
             'is_staff': is_staff,
+            'email': email,
             'username': username,
             'btc_wallet': btc_wallet,
             'monthjoined': date,
@@ -301,7 +310,14 @@ class TokenSerializer(serializers.ModelSerializer):
             "referral": referral,
             "last_login": last_login,
             "activeA": activeA,
-            "activeP": activeP
+            "activeP": activeP,
+            "first_name": first_name,
+            "last_name": last_name,
+            "country": country,
+            "address": address,
+            "zip_code": zip_code,
+            "city": city,
+            "email_verified": email_verified
             
         }
 

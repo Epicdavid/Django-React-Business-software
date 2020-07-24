@@ -53,13 +53,20 @@ export const authLogin = (email, password) => {
             username: res.data.user_detail.username,
             expirationDate: new Date(new Date().getTime() + 3600 * 1000),
             userId: res.data.user,
+            email: res.data.user_detail.email,
             btc_wallet: res.data.user_detail.btc_wallet,
             balance: res.data.user_detail.balance,
             hash: res.data.user_detail.hash,
             last_login: res.data.user_detail.last_login,
             activeP: res.data.user_detail.activeP,
             activeA: res.data.user_detail.activeA,
-            refLink: res.data.user_detail.Link
+            refLink: res.data.user_detail.Link,
+            first_name: res.data.user_detail.first_name,
+            last_name: res.data.user_detail.last_name,
+            country: res.data.user_detail.country,
+            address: res.data.user_detail.address,
+            zip_code: res.data.user_detail.zip_code,
+            city: res.data.user_detail.city,
           }
           localStorage.setItem("user", JSON.stringify(user));
           dispatch(authSuccess(user));
@@ -79,6 +86,7 @@ export const authLogin = (email, password) => {
       });
   };
 };
+
 
 export const authSignup = (username, email, password1, password2, btc_wallet) => {
   return dispatch => {

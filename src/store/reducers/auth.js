@@ -15,8 +15,13 @@ const initialState = {
   lastLogin: null,
   activeA: null,
   activeP: null,
-  refLink: null
-
+  refLink: null,
+  first_name: null,
+  last_name: null,
+  country: null,
+  address: null,
+  zip_code: null,
+  city: null,
 };
 
 const authStart = (state, action) => {
@@ -41,7 +46,13 @@ const authSuccess = (state, action) => {
     lastLogin: action.user.last_login,
     activeA: action.user.activeA,
     activeP: action.user.activeP,
-    refLink: action.user.refLink
+    refLink: action.user.refLink,
+    first_name: action.user.first_name,
+    last_name: action.user.last_name,
+    country: action.user.country,
+    address: action.user.address,
+    zip_code: action.user.zip_code,
+    city: action.user.city,
   });
 };
 

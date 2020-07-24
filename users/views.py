@@ -45,6 +45,7 @@ def django_rest_auth_null():
 
 
 class UserPartialUpdateView(GenericAPIView, UpdateModelMixin):
+    
     '''
     You just need to provide the field which is to be modified.
     '''
