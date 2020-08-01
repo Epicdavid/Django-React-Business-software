@@ -111,7 +111,9 @@ class Order(models.Model):
     status = models.CharField(max_length=200, choices=STATUS)
     amount = models.DecimalField(max_digits=15, decimal_places=2,default=0.00)
     date_ordered = models.DateTimeField(auto_now_add=True)
-    expires = datetime.today()+ relativedelta(months=10)
+    expires = datetime.today()+ relativedelta(months=12)
+    txid = models.CharField(max_length=300, blank=True, null=True)
+
 
     
     def __str__(self):

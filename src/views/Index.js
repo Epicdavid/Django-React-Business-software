@@ -12,6 +12,7 @@ import { logout } from "../store/actions/auth";
 // sections for this page/view
 
 import Signup from "views/IndexSections/Signup.js";
+import Basics from "views/IndexSections/Basics.js";
 
 class Index extends React.Component {
   componentDidMount() {
@@ -27,7 +28,7 @@ class Index extends React.Component {
         <div className="wrapper">
           <PageHeader />
           <div className="main">
-
+            <Basics />
             <Signup />
           </div>
           <Footer />
