@@ -81,16 +81,17 @@ class Profile(models.Model):
         return self.user.username
 
 
-class Compound(models.Model):
+
+class Withdraw(models.Model):
+    STATUS = (
+        ('Pending', 'Pending'),
+        ('Completed', 'Completed')
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    active = models.BooleanField(default=False)
-    duration = models.IntegerField(default=6)
     amount = models.DecimalField(max_digits=15,decimal_places=2)
-    expires = ""
-
-    def save(self, *args, **kwargs):
-        self.expires = datetime.today()+ relativedelta(months=self.duration)
-
+    status = models.CharField(max_length=200, choices=STATUS)
+    date_ordered = models.DateTimeField(auto_now_add=True)
+    
 class Product(models.Model):
     STATUS = (
         ('Pending', 'Pending'),
