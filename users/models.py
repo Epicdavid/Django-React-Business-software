@@ -82,6 +82,13 @@ class Profile(models.Model):
 
 
 
+class Compound(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    active = models.BooleanField(default=False)
+    duration = models.IntegerField(default=6)
+    amount = models.DecimalField(max_digits=15,decimal_places=2)
+
+
 class Withdraw(models.Model):
     STATUS = (
         ('Pending', 'Pending'),
@@ -91,6 +98,7 @@ class Withdraw(models.Model):
     amount = models.DecimalField(max_digits=15,decimal_places=2)
     status = models.CharField(max_length=200, choices=STATUS)
     date_ordered = models.DateTimeField(auto_now_add=True)
+        
     
 class Product(models.Model):
     STATUS = (
