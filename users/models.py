@@ -81,6 +81,15 @@ class Profile(models.Model):
         return self.user.username
 
 
+class Compound(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    active = models.BooleanField(default=False)
+    duration = models.IntegerField(default=6)
+    amount = models.DecimalField(max_digits=15,decimal_places=2)
+    expires = ""
+
+    def save(self, *args, **kwargs):
+        self.expires = datetime.today()+ relativedelta(months=self.duration)
 
 class Product(models.Model):
     STATUS = (
@@ -125,7 +134,8 @@ class Order(models.Model):
         if  self.status == "Approved":
             try:
                 print(self.amount)
-                acc = User.objects.get(username=self.customer) 
+                acc = self.customer
+                print(acc)
                 acc.account_balance += self.amount
                 acc.save()
             except Exception as e:
