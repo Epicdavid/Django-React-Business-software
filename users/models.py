@@ -36,6 +36,8 @@ class User(AbstractUser):
     active_affiliates = models.CharField(max_length=200, default=0)
     active_package = models.CharField(max_length=300,blank=True, null=True)
     email_verified = models.BooleanField(default=False)
+    compounding = models.BooleanField(default=False)
+    totalWithdrawn = models.DecimalField(max_digits=15,decimal_places=2, default=0)
     
     
     def __str__(self):
@@ -89,6 +91,14 @@ class Compound(models.Model):
     amount = models.DecimalField(max_digits=15,decimal_places=2)
 
 
+    def save(self, *args, **kwargs):
+        u = self.user
+        u.compounding = True
+        u.save()
+        super().save(*args, **kwargs) 
+
+
+        
 class Withdraw(models.Model):
     STATUS = (
         ('Pending', 'Pending'),
@@ -98,12 +108,20 @@ class Withdraw(models.Model):
     amount = models.DecimalField(max_digits=15,decimal_places=2)
     status = models.CharField(max_length=200, choices=STATUS)
     date_ordered = models.DateTimeField(auto_now_add=True)
-    date_approved = " "
+    date_approved = models.DateTimeField(auto_now=True)
+    
+    
+    def __str__(self):
+        return self.user.username
 
-    def save(self):
+
+    
+    def save(self, *args, **kwargs):
         if self.status == "Approved":
-            self.date_approved = models.DateTimeField(auto_now=True)
-
+            u = self.user
+            u.totalWithdrawn += self.amount
+            u.save()
+        super().save(*args, **kwargs)     
         
     
 class Product(models.Model):
@@ -162,6 +180,7 @@ class CompletedKit(models.Model):
     user = models.ForeignKey(User, related_name="completed_kits", on_delete=models.CASCADE)
     product = models.ForeignKey(Product, related_name="completed_kits", on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=15, decimal_places=2,default=0.00)
+    
     history = HistoricalRecords()
 
 
@@ -171,12 +190,17 @@ class CompletedKit(models.Model):
 
 
 class Stat(models.Model):
+    STATUS = (
+        ('ROI', 'Interest Earning'),
+        ('Refferal', 'Refferal Earning'),
+    )
     user = models.ForeignKey(User, related_name="stats", on_delete=models.CASCADE)
     newprofit = models.DecimalField(max_digits=15, decimal_places=0, default=0)
     storage = models.DecimalField(max_digits=15, decimal_places=0, default=0)
     allStorage = models.DecimalField(max_digits=15, decimal_places=0, default=0)
     referral_earning = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     new_refEarning = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    changeReason = models.CharField(max_length=100, choices=STATUS, default="ROI")
     history = HistoricalRecords()
     
 

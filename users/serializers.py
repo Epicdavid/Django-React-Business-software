@@ -280,6 +280,8 @@ class TokenSerializer(serializers.ModelSerializer):
         email = serializer_data.get('email')
         email_verified = serializer_data.get('email_verified')
         btc_wallet = serializer_data.get('btc_wallet')
+        compounding = serializer_data.get('compounding')
+        withdrawn = serializer_data.get('totalWithdrawn')
         time = serializer_data.get('date_joined')
         date = datetime.strptime(time, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%B')
         urlhash = serializer_data.get('urlhash')
@@ -307,6 +309,7 @@ class TokenSerializer(serializers.ModelSerializer):
             'balance': balance,
             'last_login': last_login,
             'Link':ref,
+            'compounding':compounding,
             "referral": referral,
             "last_login": last_login,
             "activeA": activeA,
@@ -317,7 +320,8 @@ class TokenSerializer(serializers.ModelSerializer):
             "address": address,
             "zip_code": zip_code,
             "city": city,
-            "email_verified": email_verified
+            "email_verified": email_verified,
+            "withdrawn": withdrawn
             
         }
 

@@ -56,6 +56,8 @@ export const authLogin = (email, password) => {
             email: res.data.user_detail.email,
             btc_wallet: res.data.user_detail.btc_wallet,
             balance: res.data.user_detail.balance,
+            compounding: res.data.user_detail.compounding,
+            withdrawn: res.data.user_detail.withdrawn,
             hash: res.data.user_detail.hash,
             last_login: res.data.user_detail.last_login,
             activeP: res.data.user_detail.activeP,
