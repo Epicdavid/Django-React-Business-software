@@ -1,8 +1,22 @@
 
+/* 
+=========================================================
+* BLK Design System React - v1.1.0
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/blk-design-system-react
+* Copyright 2020 Creative Tim (https://www.creative-tim.com)
+* Licensed under MIT (https://github.com/creativetimofficial/blk-design-system-react/blob/master/LICENSE.md)
+
+* Coded by Creative Tim
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+*/
 import React from "react";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { logout } from "../../store/actions/auth";
 // reactstrap components
 import {
   Button,
@@ -15,10 +29,6 @@ import {
   Container,
   Row,
   Col,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
   UncontrolledTooltip
 } from "reactstrap";
 
@@ -83,11 +93,11 @@ class PagesNavbar extends React.Component {
               id="navbar-brand"
               tag={Link}
             >
-              <span>Dippace• </span>
-              We Trade, You Earn.
+              <span>BLK• </span>
+              Design System React
             </NavbarBrand>
             <UncontrolledTooltip placement="bottom" target="navbar-brand">
-              Connecting You To The Future Of Finance
+              Designed and Coded by Creative Tim
             </UncontrolledTooltip>
             <button
               aria-expanded={this.state.collapseOpen}
@@ -110,7 +120,7 @@ class PagesNavbar extends React.Component {
               <Row>
                 <Col className="collapse-brand" xs="6">
                   <a href="#pablo" onClick={e => e.preventDefault()}>
-                    Dippace• Crypto Trading
+                    BLK•React
                   </a>
                 </Col>
                 <Col className="collapse-close text-right" xs="6">
@@ -161,58 +171,14 @@ class PagesNavbar extends React.Component {
                   <p className="d-lg-none d-xl-none">Instagram</p>
                 </NavLink>
               </NavItem>
-              <UncontrolledDropdown nav>
-                <DropdownToggle
-                  caret
-                  color="default"
-                  data-toggle="dropdown"
-                  href="#pablo"
-                  nav
-                  onClick={e => e.preventDefault()}
-                >
-                  <i className="fa fa-cogs d-lg-none d-xl-none" />
-                  Getting started
-                </DropdownToggle>
-                <DropdownMenu className="dropdown-with-icons">
-                  <DropdownItem tag={Link} to="/Rates">
-                    <i className="tim-icons icon-paper" />
-                    Our Rates
-                  </DropdownItem>
-                  <DropdownItem tag={Link} to="/register-page">
-                    <i className="tim-icons icon-bullet-list-67" />
-                    Register Page
-                  </DropdownItem>
-                  {
-                    this.props.isAuthenticated ?
-                      <DropdownItem onClick={this.props.logout}>
-                        <i className="tim-icons icon-single-02" />
-                    Logout
-                  </DropdownItem>
-                      :
-                      <DropdownItem tag={Link} to="/login-page" >
-                        <i className="tim-icons icon-single-02" />
-                  Login
-                </DropdownItem>
-                  }
-
-                  <DropdownItem tag={Link} to="/landing-page">
-                    <i className="tim-icons icon-image-02" />
-                    Landing Page
-                  </DropdownItem>
-                  <DropdownItem tag={Link} to="/profile-page">
-                    <i className="tim-icons icon-single-02" />
-                    Profile Page
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
               <NavItem>
                 <Button
                   className="nav-link d-none d-lg-block"
                   color="primary"
                   target="_blank"
+                  href="https://www.creative-tim.com/product/blk-design-system-pro-react?ref=bdsr-examples-navbar-upgrade-pro"
                 >
-                  <Link to="/Dashboard"><i className="tim-icons icon-spaceship" /> Dashboard
-                  </Link>
+                  <i className="tim-icons icon-spaceship" /> Upgrade to PRO
                 </Button>
               </NavItem>
               <NavItem>
@@ -233,17 +199,4 @@ class PagesNavbar extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    isAuthenticated: state.auth.token !== null
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    logout: () => dispatch(logout())
-
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(PagesNavbar);
+export default PagesNavbar;

@@ -1,26 +1,42 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./views/App";
+import "assets/css/nucleo-icons.css";
+import "assets/scss/blk-design-system-react.scss?v=1.1.0";
+import "assets/demo/demo.css";
 
 import { createStore, compose, applyMiddleware, combineReducers } from "redux";
 import thunk from "redux-thunk";
-import { Provider, } from "react-redux";
+import { Provider, connect } from "react-redux";
 import authReducer from "./store/reducers/auth";
 import orderReducer from "./store/reducers/orders";
 import productReducer from "./store/reducers/products";
 import statReducer from "./store/reducers/stats";
 import chartReducer from "./store/reducers/chart";
+
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+
+
+
+
+
+import Index from "views/Index.js";
+import LandingPage from "views/examples/LandingPage.js";
+import RegisterPage from "views/examples/RegisterPage.js";
+import ProfilePage from "views/examples/ProfilePage.js";
+import LoginPage from "views/examples/login.js";
+import Rates from "views/examples/Rates.js";
+import VerifyPage from "views/examples/Verify.js";
+import ForgotPass from "views/examples/ForgotPassword.js";
+import PassReset from "views/examples/PasswordReset.js";
+import EmailSent from "views/examples/youremailSent.js";
+
+
 import "assets/css/loader.css";
 
-/*import "assets/css/nucleo-icons.css";
-import "assets/scss/blk-design-system-react.scss?v=1.1.0";
-import "assets/demo/demo.css";
-*/
 
-import "assets/admin/scss/black-dashboard-react.scss";
-import "assets/admin/demo/demo.css";
-import "assets/admin/css/nucleo-icons.css";
+
+
 
 
 const rootReducer = combineReducers({
@@ -42,7 +58,40 @@ const store = createStore(rootReducer, composeEnhances(applyMiddleware(thunk)))
 ReactDOM.render(
 
   <Provider store={store}>
-    <App />
+    <BrowserRouter>
+      <Switch>
+        <Route
+          path="/landing-page"
+          render={props => <LandingPage {...props} />}
+        />
+        <Route path="/Rates" render={props => <Rates {...props} />} />
+        <Route path="/your-email-sent" render={props => <EmailSent {...props} />} />
+        <Route
+          path="/register-page"
+          render={props => <RegisterPage {...props} />}
+        />
+        <Route path="/password-reset/confirm/:uid/:token" render={props => <PassReset {...props} />} />
+        <Route
+          path="/profile-page"
+          render={props => <ProfilePage {...props} />}
+        />
+        <Route
+          path="/rest-auth/registration/account-confirm-email/:token"
+          render={props => <VerifyPage {...props} />}
+        />
+        <Route
+          path="/login-page"
+          render={props => <LoginPage {...props} />}
+        />
+        <Route
+          path="/password/reset"
+          render={props => <ForgotPass {...props} />}
+        />
+
+
+        <Redirect from="/" to="/landing-page" />
+      </Switch>
+    </BrowserRouter>
   </Provider>,
   document.getElementById("root")
 );

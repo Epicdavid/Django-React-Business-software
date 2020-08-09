@@ -27,7 +27,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'users',
     "pinax.referrals",
-    "mptt"
+    "mptt",
+    "webpack_loader"
 ]
 
 MIDDLEWARE = [
@@ -48,8 +49,10 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'build'),
+            os.path.join(BASE_DIR, 'buildx'),
+             os.path.join(BASE_DIR, 'build'),
             os.path.join(BASE_DIR, 'templates')
+           
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -76,9 +79,18 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'build/static')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'buildx/static'),os.path.join(BASE_DIR, 'build/static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'dist/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+    }
+}
+
+
 
 PINAX_REFERRALS_IP_ADDRESS_META_FIELD = True
 

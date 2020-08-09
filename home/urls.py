@@ -4,7 +4,9 @@ from allauth.account.views import confirm_email
 from users.views import *
 from rest_auth.registration.views import VerifyEmailView, RegisterView 
 from django.views.generic import TemplateView
-
+from django.conf import settings
+from django.conf.urls.static import static
+from django.views.generic import RedirectView
 
 urlpatterns = [
     
@@ -28,5 +30,7 @@ urlpatterns = [
      name='account_email_verification_sent'),
     path('admin/', admin.site.urls),
     re_path(r"^referrals/", include("pinax.referrals.urls", namespace="pinax_referrals")),
-    #re_path(r'^.*', TemplateView.as_view(template_name='index.html')),
-]
+    re_path(r'^.*', TemplateView.as_view(template_name='indeEx.html')),
+    re_path(r'^./user/*', TemplateView.as_view(template_name='user.html')),
+    path('black-dashboard-react/static/media/', RedirectView.as_view(url='/user/static/media/')),
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
