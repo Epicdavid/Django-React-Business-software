@@ -6,6 +6,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated,AllowAny
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.mixins import UpdateModelMixin
+from django.core.mail import send_mail
 
 from allauth.account.utils import send_email_confirmation
 from rest_framework.decorators import api_view
@@ -41,8 +42,24 @@ def django_rest_auth_null():
 
 
 
-    
+class Contact(APIView):
 
+    def post(self, request, *args, **kwargs):
+        serializer_class = serializers.Contact(data=request.data)
+        if serializer_class.is_valid():
+             data = serializer_class.validated_data
+             email_from = data.get('email')
+             subject = data.get('subject')
+             name = data.get('name')
+
+             company = data.get('company')
+            
+             phone = data.get('phone')
+             message = data.get('message')
+             
+             send_mail(subject, message, email_from,['support@site.com'])
+             return Response({"success": "Your message has been sent, we will be in touch shortly"})
+        return Response({'success': "Failed"}, status=status.HTTP_400_BAD_REQUEST)     
 
 class UserPartialUpdateView(GenericAPIView, UpdateModelMixin):
     

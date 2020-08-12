@@ -27,6 +27,16 @@ from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.validators import ASCIIUsernameValidator
 
 
+
+class Contact(serializers.Serializer):
+    name = serializers.CharField()
+    email = serializers.EmailField()
+    company = serializers.CharField(required=False, allow_blank=True)
+    phone = serializers.CharField(required=False, allow_blank=True)
+    subject = serializers.CharField()
+    message = serializers.CharField()
+
+
 class Login(LoginSerializer):
     username = serializers.CharField(required=False, allow_blank=True)
     email = serializers.EmailField(required=False, allow_blank=True)
