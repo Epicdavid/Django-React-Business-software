@@ -89,7 +89,7 @@ class Compound(models.Model):
     active = models.BooleanField(default=False)
     duration = models.IntegerField(default=6)
     amount = models.DecimalField(max_digits=15,decimal_places=2)
-
+    date_requested =  models.DateTimeField(auto_now_add=True, null=True)
 
     def save(self, *args, **kwargs):
         u = self.user

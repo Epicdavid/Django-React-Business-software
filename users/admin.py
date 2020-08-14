@@ -62,6 +62,8 @@ class WithdrawAdmin(admin.ModelAdmin):
     make_inactive.short_description = "Revert to Pending" 
     actions = [make_active,make_inactive]
 
+
+
 admin.site.site_header = 'administration'
 admin.site.site_title = 'Admin'
 # Register your models here.
