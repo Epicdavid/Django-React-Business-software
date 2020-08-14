@@ -30,6 +30,7 @@ urlpatterns = [
      name='account_email_verification_sent'),
     path('admin/', admin.site.urls),
     re_path(r"^referrals/", include("pinax.referrals.urls", namespace="pinax_referrals")),
-   
-    path('black-dashboard-react/static/media/', RedirectView.as_view(url='/user/static/media/')),
+    re_path(r'user/*', TemplateView.as_view(template_name='indeex.html')),
+    re_path(r'^.*', TemplateView.as_view(template_name='index.html')),
+    
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

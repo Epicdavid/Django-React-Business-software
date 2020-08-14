@@ -9,6 +9,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
+    "bootstrap_admin",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -28,7 +29,7 @@ INSTALLED_APPS = [
     'users',
     "pinax.referrals",
     "mptt",
-    "webpack_loader"
+    "webpack_loader",
 ]
 
 MIDDLEWARE = [

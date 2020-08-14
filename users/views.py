@@ -66,6 +66,7 @@ class UserPartialUpdateView(GenericAPIView, UpdateModelMixin):
     '''
     You just need to provide the field which is to be modified.
     '''
+    permission_classes = [IsAuthenticated,] 
     queryset = User.objects.all()
     serializer_class = serializers.UpdateUserSerializer
     def update(self, request, *args, **kwargs):
@@ -73,7 +74,7 @@ class UserPartialUpdateView(GenericAPIView, UpdateModelMixin):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
-        print(instance.email_verified)
+        
         serializer.save()
         return Response(serializer.data)
 

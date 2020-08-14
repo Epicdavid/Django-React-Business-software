@@ -159,7 +159,7 @@ class Order(models.Model):
 
     
     def __str__(self):
-        return self.product.name
+        return self.customer
 
 
     def save(self,*args, **kwargs):
@@ -196,9 +196,9 @@ class Stat(models.Model):
     )
     user = models.ForeignKey(User, related_name="stats", on_delete=models.CASCADE)
     newprofit = models.DecimalField(max_digits=15, decimal_places=0, default=0)
-    storage = models.DecimalField(max_digits=15, decimal_places=0, default=0)
-    allStorage = models.DecimalField(max_digits=15, decimal_places=0, default=0)
-    referral_earning = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    storage = models.DecimalField(max_digits=15, decimal_places=0, default=0,verbose_name="ROI")
+    allStorage = models.DecimalField(max_digits=15, decimal_places=0, default=0,verbose_name="Total Earning")
+    referral_earning = models.DecimalField(max_digits=15, decimal_places=2, default=0,verbose_name="Affiliate Earning")
     new_refEarning = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     changeReason = models.CharField(max_length=100, choices=STATUS, default="ROI")
     history = HistoricalRecords()
@@ -216,6 +216,11 @@ class Stat(models.Model):
         self.new_refEarning =  0
         
         super().save(*args, **kwargs)    
+
+    class Meta: 
+        
+        # Add verbose name 
+        verbose_name = 'Load User'    
 
     
 
