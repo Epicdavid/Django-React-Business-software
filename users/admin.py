@@ -62,6 +62,20 @@ class WithdrawAdmin(admin.ModelAdmin):
     make_inactive.short_description = "Revert to Pending" 
     actions = [make_active,make_inactive]
 
+class CompoundAdmin(admin.ModelAdmin):
+    
+    list_display = ('user','active','amount','date_requested')   
+    def make_active(modeladmin, request, queryset): 
+        queryset.update(active = 1) 
+        messages.success(request, "Selected Record(s) Marked as Active Successfully !!")  
+
+    def make_inactive(modeladmin, request, queryset): 
+        queryset.update(active = 0) 
+        messages.success(request, "Selected Record(s) Marked as Inactive Successfully !!")    
+
+    make_active.short_description = "Activate Compounding"
+    make_inactive.short_description = "Deactivate Compounding" 
+    actions = [make_active,make_inactive]
 
 
 admin.site.site_header = 'administration'
@@ -74,4 +88,4 @@ admin.site.register(Stat,StatAdmin)
 admin.site.register(Profile)
 admin.site.register(CompletedKit)
 admin.site.register(Withdraw,WithdrawAdmin)
-admin.site.register(Compound)
+admin.site.register(Compound,CompoundAdmin)
