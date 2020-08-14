@@ -47,6 +47,21 @@ class OrderAdmin(admin.ModelAdmin):
     make_inactive.short_description = "Revert to Pending" 
     actions = [make_active,make_inactive]
 
+class WithdrawAdmin(admin.ModelAdmin):
+    
+    list_display = ('user','amount','status','date_ordered')   
+    def make_active(modeladmin, request, queryset): 
+        queryset.update(status = 'Approved') 
+        messages.success(request, "Selected Record(s) Marked as Approved Successfully !!")  
+
+    def make_inactive(modeladmin, request, queryset): 
+        queryset.update(status = 'Pending') 
+        messages.success(request, "Selected Record(s) Marked as Pending Successfully !!")    
+
+    make_active.short_description = "Approve Withdrawal"
+    make_inactive.short_description = "Revert to Pending" 
+    actions = [make_active,make_inactive]
+
 admin.site.site_header = 'administration'
 admin.site.site_title = 'Admin'
 # Register your models here.
@@ -56,5 +71,5 @@ admin.site.register(Order,OrderAdmin)
 admin.site.register(Stat,StatAdmin)
 admin.site.register(Profile)
 admin.site.register(CompletedKit)
-admin.site.register(Withdraw)
+admin.site.register(Withdraw,WithdrawAdmin)
 admin.site.register(Compound)

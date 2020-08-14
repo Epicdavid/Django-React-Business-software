@@ -107,7 +107,7 @@ class Withdraw(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=15,decimal_places=2)
     status = models.CharField(max_length=200, choices=STATUS)
-    date_ordered = models.DateTimeField(auto_now_add=True)
+    date_ordered = models.DateTimeField(auto_now_add=True, verbose_name="Date Requested")
     date_approved = models.DateTimeField(auto_now=True)
     
     
