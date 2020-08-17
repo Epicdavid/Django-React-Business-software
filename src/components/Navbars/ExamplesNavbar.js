@@ -138,7 +138,7 @@ class PagesNavbar extends React.Component {
               <NavItem className="p-0">
                 <NavLink
                   data-placement="bottom"
-                  href="https://twitter.com/CreativeTim"
+                  href="#"
                   rel="noopener noreferrer"
                   target="_blank"
                   title="Follow us on Twitter"
@@ -150,7 +150,7 @@ class PagesNavbar extends React.Component {
               <NavItem className="p-0">
                 <NavLink
                   data-placement="bottom"
-                  href="https://www.facebook.com/CreativeTim"
+                  href="#"
                   rel="noopener noreferrer"
                   target="_blank"
                   title="Like us on Facebook"
@@ -162,7 +162,7 @@ class PagesNavbar extends React.Component {
               <NavItem className="p-0">
                 <NavLink
                   data-placement="bottom"
-                  href="https://www.instagram.com/CreativeTimOfficial"
+                  href="#"
                   rel="noopener noreferrer"
                   target="_blank"
                   title="Follow us on Instagram"
@@ -176,7 +176,7 @@ class PagesNavbar extends React.Component {
                   className="nav-link d-none d-lg-block"
                   color="primary"
                   target="_blank"
-                  href="https://www.creative-tim.com/product/blk-design-system-pro-react?ref=bdsr-examples-navbar-upgrade-pro"
+                  href="#"
                 >
                   <i className="tim-icons icon-spaceship" /> Upgrade to PRO
                 </Button>
@@ -187,7 +187,7 @@ class PagesNavbar extends React.Component {
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="https://github.com/creativetimofficial/blk-design-system-react/issues">
+                <NavLink href="">
                   Have an issue?
                 </NavLink>
               </NavItem>

@@ -9,6 +9,7 @@ from django.conf.urls.static import static
 from django.views.generic import RedirectView
 
 urlpatterns = [
+    path('user-detailx/', UserDetailsView.as_view()),
     path('contact-us/', Contact.as_view(), name='contact-us'),
     path('api-auth/', include('rest_framework.urls')),
     path('sendconfirmationemail/', EmailConfirmation.as_view(), name='send-email-confirmation'),

@@ -20,7 +20,7 @@ from rest_framework.response import Response
 from rest_framework.generics import get_object_or_404
 from allauth.account.admin import EmailAddress
 
-
+from rest_auth.views import LoginView
 from allauth.account.models import EmailConfirmation, EmailConfirmationHMAC
 from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
@@ -32,6 +32,10 @@ from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView, RetrieveUpdateAPIView
 from rest_framework.exceptions import APIException
 
+from rest_auth.models import TokenModel
+from django.conf import settings
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
 
 
 
@@ -40,7 +44,11 @@ from rest_framework.exceptions import APIException
 def django_rest_auth_null():
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
-
+class UserDetailsView(ObtainAuthToken):
+  
+    def get(self, request, *args, **kwargs):
+        token = Token.objects.get(key=request.data['token'])
+        return Response({'token': token.key, 'id': token.user_id})
 
 class Contact(APIView):
 

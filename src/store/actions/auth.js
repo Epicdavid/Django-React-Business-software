@@ -1,6 +1,7 @@
 import axios from "axios";
 import * as url from "./config";
 import * as actionTypes from "./actionTypes";
+import moment from 'moment';
 
 export const authStart = () => {
   return {
@@ -25,6 +26,8 @@ export const authFail = (detail) => {
 
 export const logout = () => {
   localStorage.removeItem("user");
+  localStorage.removeItem("pMonths");
+  localStorage.removeItem("pData");
   return {
     type: actionTypes.AUTH_LOGOUT
   };
@@ -38,57 +41,74 @@ export const checkAuthTimeout = expirationTime => {
   };
 };
 
+
+
+
+
+
 export const authLogin = (email, password) => {
-  return dispatch => {
+
+  return async dispatch => {
     dispatch(authStart());
-    const user = {
+    const userx = {
       email, password
     }
-    axios
-      .post(url.BASE_URL + "rest-auth/login/", user)
-      .then(res => {
-        if (res.data.key) {
-          const user = {
-            token: res.data.key,
-            username: res.data.user_detail.username,
-            expirationDate: new Date(new Date().getTime() + 3600 * 1000),
-            userId: res.data.user,
-            email: res.data.user_detail.email,
-            btc_wallet: res.data.user_detail.btc_wallet,
-            balance: res.data.user_detail.balance,
-            compounding: res.data.user_detail.compounding,
-            withdrawn: res.data.user_detail.withdrawn,
-            hash: res.data.user_detail.hash,
-            last_login: res.data.user_detail.last_login,
-            activeP: res.data.user_detail.activeP,
-            activeA: res.data.user_detail.activeA,
-            refLink: res.data.user_detail.Link,
-            first_name: res.data.user_detail.first_name,
-            last_name: res.data.user_detail.last_name,
-            country: res.data.user_detail.country,
-            address: res.data.user_detail.address,
-            zip_code: res.data.user_detail.zip_code,
-            city: res.data.user_detail.city,
-          }
-          localStorage.setItem("user", JSON.stringify(user));
-          dispatch(authSuccess(user));
-          dispatch(checkAuthTimeout(3600));
-        }
-        if (res.data.error) {
+    const pMonths = []
+    const pData = []
+    let user = {}
+    await Promise.allSettled(
+      [
+        axios.post(url.BASE_URL + "rest-auth/login/", userx),
+        axios.get('https://api.blockchain.info/charts/market-price?timespan=7days&cors=true')
+      ]).then(axios.spread((res1, res2) => {
+
+        if (res1.value.data.error) {
           const detail = {
-            detail: res.data.error
+            detail: res1.value.data.error
           }
           dispatch(authFail(detail));
         }
+        user = {
+          token: res1.value.data.key,
+          username: res1.value.data.user_detail.username,
+          expirationDate: new Date(new Date().getTime() + 3600 * 1000),
+          userId: res1.value.data.user,
+          email: res1.value.data.user_detail.email,
+          btc_wallet: res1.value.data.user_detail.btc_wallet,
+          balance: res1.value.data.user_detail.balance,
+          compounding: res1.value.data.user_detail.compounding,
+          withdrawn: res1.value.data.user_detail.withdrawn,
+          hash: res1.value.data.user_detail.hash,
+          last_login: res1.value.data.user_detail.last_login,
+          activeP: res1.value.data.user_detail.activeP,
+          activeA: res1.value.data.user_detail.activeA,
+          refLink: res1.value.data.user_detail.Link,
+          first_name: res1.value.data.user_detail.first_name,
+          last_name: res1.value.data.user_detail.last_name,
+          country: res1.value.data.user_detail.country,
+          address: res1.value.data.user_detail.address,
+          zip_code: res1.value.data.user_detail.zip_code,
+          city: res1.value.data.user_detail.city,
+        }
+        localStorage.setItem("user", JSON.stringify(user));
+        dispatch(authSuccess(user));
+        dispatch(checkAuthTimeout(3600));
 
-      })
-      .catch(fail => {
-        console.log(fail)
-        dispatch(authFail());
-      });
-  };
-};
+        for (const x of res2.value.data.values) {
+          var p = x.y
+          pData.push(parseInt(p))
+          var d = new Date(x.x * 1000)
+          var c = moment(d).format('MMM Do ')
+          pMonths.push(c)
 
+        }
+        localStorage.setItem("pMonths", JSON.stringify(pMonths));
+        localStorage.setItem("PData", JSON.stringify(pData));
+      })).catch(error => { console.log(error) })
+    return user
+
+  }
+}
 
 export const authSignup = (username, email, password1, password2, btc_wallet) => {
   return dispatch => {
