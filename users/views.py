@@ -74,7 +74,7 @@ class UserPartialUpdateView(GenericAPIView, UpdateModelMixin):
     '''
     You just need to provide the field which is to be modified.
     '''
-    permission_classes = [IsAuthenticated,] 
+    authentication_classes = [TokenAuthentication,] 
     queryset = User.objects.all()
     serializer_class = serializers.UpdateUserSerializer
     def update(self, request, *args, **kwargs):
@@ -127,7 +127,6 @@ class EmailConfirmation(APIView):
 def validateEmailToken(request):
     d = json.loads(request.body)
     data = d['body']
-    print(data['token'])
     token = data['token']
     res = {
         'status': 'success',
@@ -183,9 +182,9 @@ class VerifyEmailView(APIView):
             confirmation = self.get_object()
             confirmation.confirm(self.request)
             return Response({'detail': _('Successfully confirmed email.')}, status=status.HTTP_200_OK)
-        except EmailConfirmation.DoesNotExist:
-            return Response({'detail': _('Error. Incorrect key.')}, status=status.HTTP_404_NOT_FOUND)
-
+        except Exception as e:
+            return Response({'detail': _('Error. Incorrect key.')}, status=status.HTTP_400_BAD_REQUEST)
+    
     def get_object(self, queryset=None):
         key = self.kwargs['key']
         emailconfirmation = EmailConfirmationHMAC.from_key(key)
