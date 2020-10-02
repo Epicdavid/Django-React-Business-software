@@ -20,7 +20,7 @@ from rest_framework.response import Response
 from rest_framework.generics import get_object_or_404
 from allauth.account.admin import EmailAddress
 
-
+from rest_auth.views import LoginView
 from allauth.account.models import EmailConfirmation, EmailConfirmationHMAC
 from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
@@ -32,6 +32,10 @@ from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView, RetrieveUpdateAPIView
 from rest_framework.exceptions import APIException
 
+from rest_auth.models import TokenModel
+from django.conf import settings
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
 
 
 
@@ -40,7 +44,11 @@ from rest_framework.exceptions import APIException
 def django_rest_auth_null():
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
-
+class UserDetailsView(ObtainAuthToken):
+  
+    def get(self, request, *args, **kwargs):
+        token = Token.objects.get(key=request.data['token'])
+        return Response({'token': token.key, 'id': token.user_id})
 
 class Contact(APIView):
 
@@ -66,7 +74,7 @@ class UserPartialUpdateView(GenericAPIView, UpdateModelMixin):
     '''
     You just need to provide the field which is to be modified.
     '''
-    permission_classes = [IsAuthenticated,] 
+    authentication_classes = [TokenAuthentication,] 
     queryset = User.objects.all()
     serializer_class = serializers.UpdateUserSerializer
     def update(self, request, *args, **kwargs):
@@ -119,7 +127,6 @@ class EmailConfirmation(APIView):
 def validateEmailToken(request):
     d = json.loads(request.body)
     data = d['body']
-    print(data['token'])
     token = data['token']
     res = {
         'status': 'success',
@@ -175,9 +182,9 @@ class VerifyEmailView(APIView):
             confirmation = self.get_object()
             confirmation.confirm(self.request)
             return Response({'detail': _('Successfully confirmed email.')}, status=status.HTTP_200_OK)
-        except EmailConfirmation.DoesNotExist:
-            return Response({'detail': _('Error. Incorrect key.')}, status=status.HTTP_404_NOT_FOUND)
-
+        except Exception as e:
+            return Response({'detail': _('Error. Incorrect key.')}, status=status.HTTP_400_BAD_REQUEST)
+    
     def get_object(self, queryset=None):
         key = self.kwargs['key']
         emailconfirmation = EmailConfirmationHMAC.from_key(key)
